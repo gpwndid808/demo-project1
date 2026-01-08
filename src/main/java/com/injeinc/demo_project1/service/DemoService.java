@@ -1,12 +1,10 @@
 package com.injeinc.demo_project1.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
-public class DemoService {
+import com.injeinc.demo_project1.entity.Board;
+
+public interface DemoService {
 	
-	public String test1() {
-		return "test1";
-	}
-
+	public List<Board> retvLstBoard();
 }
