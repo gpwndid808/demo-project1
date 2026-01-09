@@ -1,8 +1,12 @@
 package com.injeinc.demo_project1.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+
+import com.injeinc.demo_project1.entity.Board;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +20,7 @@ import lombok.NoArgsConstructor;
 //  - @Builder 추가하여 빌더 패턴 사용
 //  💡 실습: Lombok 어노테이션 추가 후 아래 코드 간소화
 
+@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,30 +33,32 @@ public class BoardResponseDto {
     private String boardTitle;
     private String boardCn;
     private String rgstrUsrId;
+    private LocalDateTime rgstrDt;
+    private LocalDateTime mdfcnDt;
     
     // TODO [3단계] Entity -> DTO 변환 생성자
     //  - Entity를 받아서 DTO로 변환하는 생성자입니다.
     //  - Service에서 사용합니다.
     //  💡 예시:
-    //  public BoardResponseDto(Board board) {
-    //      this.boardId = board.getBoardId();
-    //      this.boardTitle = board.getBoardTitle();
-    //      ...
-    //  }
+      public BoardResponseDto(Board board) {
+          this.boardId = board.getBoardId();
+          this.boardTitle = board.getBoardTitle();
+          this.rgstrUsrId = board.getRgstrUsrId();
+      }
     
     // TODO [3단계] 정적 팩토리 메서드 패턴 (권장)
     //  - 생성자 대신 정적 메서드를 사용하여 의미를 명확히 합니다.
     //  💡 예시:
-    //  public static BoardResponseDto from(Board board) {
-    //      return BoardResponseDto.builder()
-    //          .boardId(board.getBoardId())
-    //          .boardTitle(board.getBoardTitle())
-    //          .boardCn(board.getBoardCn())
-    //          .rgstrUsrId(board.getRgstrUsrId())
-    //          .rgstrDt(board.getRgstrDt())
-    //          .mdfcnDt(board.getMdfcnDt())
-    //          .build();
-    //  }
+      public static BoardResponseDto from(Board board) {
+          return BoardResponseDto.builder()
+              .boardId(board.getBoardId())
+              .boardTitle(board.getBoardTitle())
+              .boardCn(board.getBoardCn())
+              .rgstrUsrId(board.getRgstrUsrId())
+              .rgstrDt(board.getRgstrDt())
+              .mdfcnDt(board.getMdfcnDt())
+              .build();
+      }
     
     // Getter
     // TODO [1단계] Lombok @Getter로 대체 가능
