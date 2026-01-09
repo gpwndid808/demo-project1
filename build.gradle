@@ -1,38 +1,105 @@
+// TODO [1단계] build.gradle 이해하기
+//  - Gradle은 프로젝트 빌드 도구입니다.
+//  - 의존성(라이브러리) 관리, 빌드, 테스트 등을 수행합니다.
+//  💡 학습 포인트: Maven vs Gradle 차이점
+
+// TODO [1단계] plugins 블록 이해하기
+//  - 프로젝트에서 사용할 플러그인을 정의합니다.
+//  - java: Java 컴파일 지원
+//  - spring-boot: Spring Boot 애플리케이션 빌드
+//  - dependency-management: 의존성 버전 관리 자동화
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.1'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
+// TODO [1단계] 프로젝트 메타 정보
+//  - group: 프로젝트 그룹 ID (Maven의 groupId와 동일)
+//  - version: 프로젝트 버전
+//  - SNAPSHOT: 개발 중인 버전을 의미
 group = 'com.injeinc'
 version = '0.0.1-SNAPSHOT'
 description = 'Demo project for Spring Boot'
 
+// TODO [1단계] Java 버전 설정
+//  - Java 17을 사용합니다.
+//  - Spring Boot 3.x는 Java 17 이상 필요
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
+// TODO [1단계] 의존성 다운로드 저장소
+//  - mavenCentral(): Maven 중앙 저장소에서 라이브러리 다운로드
 repositories {
 	mavenCentral()
 }
 
+// TODO [2단계] 의존성(Dependencies) 이해하기
+//  - implementation: 컴파일과 런타임에 필요한 의존성
+//  - testImplementation: 테스트에만 필요한 의존성
+//  - compileOnly: 컴파일에만 필요 (런타임에는 제공됨)
+//  - runtimeOnly: 런타임에만 필요
+//  - annotationProcessor: 컴파일 시 어노테이션 처리
+//  💡 학습 포인트: 각 스코프의 차이점 이해
 dependencies {
+	// TODO [2단계] Spring Data JPA
+	//  - JPA를 쉽게 사용할 수 있게 해주는 라이브러리
+	//  - Repository 자동 구현, 쿼리 메서드 등 제공
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	
+	// TODO [1단계] Spring Web (REST API)
+	//  - RESTful API를 만들기 위한 라이브러리
+	//  - @RestController, @RequestMapping 등 제공
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	// TODO [9단계] 테스트 의존성
+	//  - JUnit, Mockito 등 테스트 도구 포함
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	// TODO [2단계] MySQL 드라이버
+	//  - MySQL 데이터베이스와 연결하기 위한 드라이버
+	//  - runtimeOnly: 실행 시에만 필요
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	
+	// TODO [1단계] Lombok
+	//  - @Getter, @Setter, @Builder 등 자동 생성
+	//  - 보일러플레이트 코드 제거
+	//  💡 주의: IDE에 Lombok 플러그인 설치 필요!
 	compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+    
+    // TODO [2단계] H2 데이터베이스 추가 (선택사항)
+    //  - 개발 편의를 위해 H2 인메모리 DB 추가 가능
+    //  - MySQL 설치 없이 빠르게 테스트 가능
+    //  💡 실습: 아래 주석을 해제하고 application.properties 수정
+    // runtimeOnly 'com.h2database:h2'
+    
+    // TODO [5단계] Validation 의존성 추가
+    //  - @Valid, @NotBlank 등 입력값 검증
+    //  💡 실습: 5단계에서 아래 의존성 추가
+    // implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // TODO [10단계] SpringDoc (Swagger) 추가
+    //  - API 문서 자동 생성
+    //  💡 실습: 10단계에서 아래 의존성 추가
+    // implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
+// TODO [9단계] 테스트 설정
+//  - JUnit Platform을 사용하여 테스트 실행
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// TODO [10단계] JAR 빌드
+//  - ./gradlew build 명령으로 실행 가능한 JAR 파일 생성
+//  - build/libs/ 폴더에 생성됨
+//  💡 실습: java -jar build/libs/demo-project1-0.0.1-SNAPSHOT.jar
