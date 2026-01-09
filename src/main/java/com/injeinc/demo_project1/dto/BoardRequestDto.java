@@ -1,5 +1,10 @@
 package com.injeinc.demo_project1.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // TODO [3단계] DTO(Data Transfer Object) 이해하기
 //  - Controller와 Service 간 데이터 전송을 위한 객체입니다.
 //  - Entity를 직접 노출하지 않고 DTO를 사용합니다.
@@ -18,6 +23,10 @@ package com.injeinc.demo_project1.dto;
 //  - @Size(min = 1, max = 100, message = "제목은 1~100자 이내여야 합니다.")
 //  💡 import jakarta.validation.constraints.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardRequestDto {
     
     // TODO [3단계] 게시글 작성 시 필요한 필드 정의
@@ -27,6 +36,7 @@ public class BoardRequestDto {
     private String boardTitle;
     private String boardCn;
     private String rgstrUsrId;
+    private String mdfcnUsrId;
     
     // TODO [3단계] toEntity() 메서드 추가하기
     //  - DTO를 Entity로 변환하는 메서드입니다.
@@ -41,37 +51,7 @@ public class BoardRequestDto {
     //  }
     
     // TODO [1단계] Lombok으로 대체 가능
-    public BoardRequestDto() {}
-    
-    public BoardRequestDto(String boardTitle, String boardCn, String rgstrUsrId) {
-        this.boardTitle = boardTitle;
-        this.boardCn = boardCn;
-        this.rgstrUsrId = rgstrUsrId;
-    }
     
     // Getter & Setter
     // TODO [1단계] Lombok @Getter, @Setter로 대체 가능
-    public String getBoardTitle() {
-        return boardTitle;
-    }
-    
-    public void setBoardTitle(String boardTitle) {
-        this.boardTitle = boardTitle;
-    }
-    
-    public String getBoardCn() {
-        return boardCn;
-    }
-    
-    public void setBoardCn(String boardCn) {
-        this.boardCn = boardCn;
-    }
-    
-    public String getRgstrUsrId() {
-        return rgstrUsrId;
-    }
-    
-    public void setRgstrUsrId(String rgstrUsrId) {
-        this.rgstrUsrId = rgstrUsrId;
-    }
 }

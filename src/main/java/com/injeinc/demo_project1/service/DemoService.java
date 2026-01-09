@@ -2,6 +2,7 @@ package com.injeinc.demo_project1.service;
 
 import java.util.List;
 
+import com.injeinc.demo_project1.dto.BoardRequestDto;
 import com.injeinc.demo_project1.entity.Board;
 
 // TODO [3단계] Service 인터페이스의 역할 이해하기
@@ -24,6 +25,7 @@ public interface DemoService {
 	//  - Board createBoard(BoardRequestDto dto); 메서드 선언
 	//  - DTO를 받아서 엔티티로 변환 후 저장
 	//  💡 학습 포인트: DTO와 Entity를 분리하는 이유
+	public void createBoard(BoardRequestDto request);
 	
 	// TODO [4단계] 게시글 수정 메서드 추가하기
 	//  - Board updateBoard(String id, BoardUpdateDto dto); 메서드 선언

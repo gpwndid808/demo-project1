@@ -1,12 +1,18 @@
 package com.injeinc.demo_project1.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // TODO [2단계] JPA 엔티티 어노테이션 이해하기
 //  - @Entity: 이 클래스가 JPA 엔티티임을 명시 (DB 테이블과 매핑)
@@ -20,6 +26,11 @@ import jakarta.persistence.Table;
 //  💡 학습 포인트: Lombok은 반복적인 코드를 자동 생성해줍니다.
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "board")
 public class Board {
 
@@ -31,7 +42,7 @@ public class Board {
     //  💡 권장: Long 타입으로 변경 고려
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String boardId;
+    private Long boardId;
 
     // TODO [2단계] 엔티티 필드 설계하기
     //  - boardTitle: 게시글 제목
@@ -50,19 +61,29 @@ public class Board {
     // TODO [8단계] BaseTimeEntity로 이동 예정
     //  - 생성일시, 수정일시는 모든 엔티티에서 공통으로 사용
     //  - BaseTimeEntity를 만들어 상속받는 구조로 리팩토링
-    private Date rgstrDt;
-    private Date mdfcnDt;
+    private LocalDateTime rgstrDt;
+    private LocalDateTime mdfcnDt;
 
     // TODO [2단계] 기본 생성자의 중요성
     //  - JPA는 리플렉션을 사용하므로 기본 생성자 필수
     //  - protected로 선언하여 외부 생성 방지
     //  💡 학습 포인트: Lombok의 @NoArgsConstructor(access = AccessLevel.PROTECTED)로 대체 가능
-    protected Board() {}
+//    protected Board() {}
     
     // TODO [3단계] 생성자 또는 Builder 추가하기
     //  - 엔티티 생성 시 필수 값을 받는 생성자 작성
     //  - 또는 @Builder 어노테이션 활용
     //  💡 예시: Board.builder().boardTitle("제목").boardCn("내용").build()
+    public static Board create(String title, String content, String rgstrUsrId, String mdfcnUsrId) {
+        return Board.builder()
+                .boardTitle(title)
+                .boardCn(content)
+                .rgstrUsrId(rgstrUsrId)
+                .mdfcnUsrId(mdfcnUsrId)
+                .rgstrDt(LocalDateTime.now())
+                .mdfcnDt(LocalDateTime.now())
+                .build();
+    }
     
     // TODO [4단계] 수정 메서드 추가하기 (더티 체킹)
     //  - updateTitle(String title), updateContent(String content) 메서드 생성
@@ -81,11 +102,11 @@ public class Board {
 
     // Getter 메서드들
     // TODO [1단계] Lombok @Getter로 대체 가능
-    public String getBoardId() { return boardId; }
-    public String getBoardTitle() { return boardTitle; }
-    public String getBoardCn() { return boardCn; }
-    public String getRgstrUsrId() { return rgstrUsrId; }
-    public Date getRgstrDt() { return rgstrDt; }
-    public String getMdfcnUsrId() { return mdfcnUsrId; }
-    public Date getMdfcnDt() { return mdfcnDt; }
+//    public String getBoardId() { return boardId; }
+//    public String getBoardTitle() { return boardTitle; }
+//    public String getBoardCn() { return boardCn; }
+//    public String getRgstrUsrId() { return rgstrUsrId; }
+//    public Date getRgstrDt() { return rgstrDt; }
+//    public String getMdfcnUsrId() { return mdfcnUsrId; }
+//    public Date getMdfcnDt() { return mdfcnDt; }
 }

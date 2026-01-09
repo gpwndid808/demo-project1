@@ -1,5 +1,10 @@
 package com.injeinc.demo_project1.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // TODO [4단계] Update DTO 이해하기
 //  - 게시글 수정 시 사용하는 DTO입니다.
 //  - 수정 가능한 필드만 포함합니다.
@@ -13,6 +18,10 @@ package com.injeinc.demo_project1.dto;
 //  - @NotBlank 등을 추가하여 입력값 검증
 //  💡 실습: 빈 값이 들어오면 에러 발생하도록 설정
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardUpdateDto {
     
     // TODO [4단계] 수정 가능한 필드만 정의
@@ -22,28 +31,6 @@ public class BoardUpdateDto {
     private String boardTitle;
     private String boardCn;
     
-    public BoardUpdateDto() {}
-    
-    public BoardUpdateDto(String boardTitle, String boardCn) {
-        this.boardTitle = boardTitle;
-        this.boardCn = boardCn;
-    }
-    
     // Getter & Setter
     // TODO [1단계] Lombok으로 대체 가능
-    public String getBoardTitle() {
-        return boardTitle;
-    }
-    
-    public void setBoardTitle(String boardTitle) {
-        this.boardTitle = boardTitle;
-    }
-    
-    public String getBoardCn() {
-        return boardCn;
-    }
-    
-    public void setBoardCn(String boardCn) {
-        this.boardCn = boardCn;
-    }
 }

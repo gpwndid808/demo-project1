@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.injeinc.demo_project1.dto.BoardRequestDto;
 import com.injeinc.demo_project1.entity.Board;
 import com.injeinc.demo_project1.repository.BoardRepository;
+
+import lombok.RequiredArgsConstructor;
 
 //import lombok.RequiredArgsConstructor;
 
@@ -26,7 +29,7 @@ import com.injeinc.demo_project1.repository.BoardRepository;
 //  💡 학습 포인트: 트랜잭션은 데이터 일관성을 보장합니다.
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class DemoServiceImpl implements DemoService {
 
@@ -36,10 +39,10 @@ public class DemoServiceImpl implements DemoService {
     //  💡 학습 포인트: 생성자 주입 방식이 권장됩니다.
     private final BoardRepository boardRepository;
     
-    public DemoServiceImpl(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
-    
+//    public DemoServiceImpl(BoardRepository boardRepository) {
+//        this.boardRepository = boardRepository;
+//    }
+//    
     // TODO [3단계] 전체 조회 구현 분석하기
     //  - Repository의 findAll() 메서드를 호출합니다.
     //  - JPA가 자동으로 SELECT * FROM board 쿼리를 생성합니다.
@@ -48,7 +51,7 @@ public class DemoServiceImpl implements DemoService {
     public List<Board> retvLstBoard() {
         return boardRepository.findAll();
     }
-    
+
     // TODO [3단계] 단건 조회 메서드 구현하기
     //  - public Board findById(String id) 메서드 작성
     //  - boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -61,7 +64,19 @@ public class DemoServiceImpl implements DemoService {
     //  - boardRepository.save(board);
     //  - 저장된 엔티티를 반환
     //  💡 실습: Postman에서 POST 요청으로 테스트
-    
+	@Override
+	public void createBoard(BoardRequestDto request) {
+		// TODO Auto-generated method stub
+		Board board = Board.create(
+				request.getBoardTitle(),
+				request.getBoardCn(),
+				request.getRgstrUsrId(),
+				request.getMdfcnUsrId()
+			);
+			
+		boardRepository.save(board);
+	}
+	
     // TODO [4단계] 게시글 수정 메서드 구현하기 (더티 체킹)
     //  - @Transactional 어노테이션 추가 (readOnly = false가 기본)
     //  - public Board updateBoard(String id, BoardUpdateDto dto) 메서드 작성
