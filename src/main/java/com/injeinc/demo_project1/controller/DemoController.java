@@ -3,6 +3,7 @@ package com.injeinc.demo_project1.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,11 @@ public class DemoController {
 	// - @PathVariable 어노테이션으로 id 값 받기
 	// - Service에서 findById()를 호출하여 특정 게시글 조회
 	// 💡 예시: GET /boards/1 -> id가 1인 게시글 반환
-
+	@GetMapping("/boards/{id}")
+	public Board findById(@PathVariable("id") String id) {
+		return demoservice.findById(id);
+	}
+	
 	// TODO [3단계] 게시글 작성 API 구현하기
 	// - @PostMapping("/boards") 어노테이션 사용
 	// - @RequestBody로 BoardRequestDto 객체 받기
@@ -62,9 +67,8 @@ public class DemoController {
 	// - 생성된 Board 엔티티 또는 BoardResponseDto 반환
 	// 💡 학습 포인트: POST는 데이터를 생성할 때 사용하는 HTTP 메서드입니다.
 	@PostMapping("/boards")
-	public void regtBoard(@RequestBody BoardRequestDto request) {
-		System.out.println("req = " + request);
-		demoservice.createBoard(request);
+	public Board regtBoard(@RequestBody BoardRequestDto request) {
+		return demoservice.createBoard(request);
 	}
 
 	// TODO [4단계] 게시글 수정 API 구현하기

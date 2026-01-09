@@ -20,12 +20,13 @@ public interface DemoService {
 	//  - Board findById(String id); 메서드 선언
 	//  - 특정 ID의 게시글을 조회하는 메서드
 	//  💡 고민: 없는 ID 조회 시 어떻게 처리할까? (Optional, Exception)
+	public Board findById(String id);
 	
 	// TODO [3단계] 게시글 작성 메서드 추가하기
 	//  - Board createBoard(BoardRequestDto dto); 메서드 선언
 	//  - DTO를 받아서 엔티티로 변환 후 저장
 	//  💡 학습 포인트: DTO와 Entity를 분리하는 이유
-	public void createBoard(BoardRequestDto request);
+	public Board createBoard(BoardRequestDto request);
 	
 	// TODO [4단계] 게시글 수정 메서드 추가하기
 	//  - Board updateBoard(String id, BoardUpdateDto dto); 메서드 선언

@@ -57,6 +57,13 @@ public class DemoServiceImpl implements DemoService {
     //  - boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
     //  💡 학습 포인트: Optional을 사용한 null 안전성
     //  💡 5단계에서 커스텀 예외로 개선합니다.
+	@Override
+	public Board findById(String id) {
+		// TODO Auto-generated method stub
+		return boardRepository.findById(id).orElseThrow(() ->
+			new RuntimeException("게시글을 찾을 수 없습니다.")
+		);
+	}
     
     // TODO [3단계] 게시글 작성 메서드 구현하기
     //  - public Board createBoard(BoardRequestDto dto) 메서드 작성
@@ -64,17 +71,14 @@ public class DemoServiceImpl implements DemoService {
     //  - boardRepository.save(board);
     //  - 저장된 엔티티를 반환
     //  💡 실습: Postman에서 POST 요청으로 테스트
+	@Transactional(readOnly = false)
 	@Override
-	public void createBoard(BoardRequestDto request) {
+	public Board createBoard(BoardRequestDto request) {
 		// TODO Auto-generated method stub
-		Board board = Board.create(
-				request.getBoardTitle(),
-				request.getBoardCn(),
-				request.getRgstrUsrId(),
-				request.getMdfcnUsrId()
-			);
+		Board board = request.toEntity();
 			
 		boardRepository.save(board);
+		return board;
 	}
 	
     // TODO [4단계] 게시글 수정 메서드 구현하기 (더티 체킹)

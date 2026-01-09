@@ -1,5 +1,9 @@
 package com.injeinc.demo_project1.dto;
 
+import java.time.LocalDateTime;
+
+import com.injeinc.demo_project1.entity.Board;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +37,8 @@ public class BoardRequestDto {
     //  - 제목(title)과 내용(content)만 받습니다.
     //  - ID는 자동 생성되므로 받지 않습니다.
     //  💡 고민: 작성자 정보는 어떻게 받을까요?
+	private Long boardId;
+	
     private String boardTitle;
     private String boardCn;
     private String rgstrUsrId;
@@ -42,13 +48,16 @@ public class BoardRequestDto {
     //  - DTO를 Entity로 변환하는 메서드입니다.
     //  - Service에서 사용할 예정입니다.
     //  💡 예시:
-    //  public Board toEntity() {
-    //      return Board.builder()
-    //          .boardTitle(this.boardTitle)
-    //          .boardCn(this.boardCn)
-    //          .rgstrUsrId(this.rgstrUsrId)
-    //          .build();
-    //  }
+    public Board toEntity() {
+    	return Board.builder()
+			.boardTitle(this.boardTitle)
+			.boardCn(this.boardCn)
+			.rgstrUsrId(this.rgstrUsrId)
+			.mdfcnUsrId(this.mdfcnUsrId)
+			.rgstrDt(LocalDateTime.now())
+	        .mdfcnDt(LocalDateTime.now())
+			.build();
+    }
     
     // TODO [1단계] Lombok으로 대체 가능
     
