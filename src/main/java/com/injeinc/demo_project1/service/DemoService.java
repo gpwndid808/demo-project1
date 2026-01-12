@@ -3,6 +3,7 @@ package com.injeinc.demo_project1.service;
 import java.util.List;
 
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 
 // TODO [3단계] Service 인터페이스의 역할 이해하기
@@ -32,11 +33,13 @@ public interface DemoService {
 	//  - Board updateBoard(String id, BoardUpdateDto dto); 메서드 선언
 	//  - 더티 체킹(Dirty Checking)을 활용한 수정
 	//  💡 핵심: @Transactional 안에서 엔티티 필드만 변경하면 자동 UPDATE
+	public Board updateBoard(String id, BoardUpdateDto update);
 	
 	// TODO [4단계] 게시글 삭제 메서드 추가하기
 	//  - void deleteBoard(String id); 메서드 선언
 	//  - Repository의 deleteById() 호출
 	//  💡 고민: 물리 삭제 vs 논리 삭제(소프트 삭제)
+	public void deleteBoard(String id);
 	
 	// TODO [5단계] 예외 처리 적용하기
 	//  - 게시글이 없을 때 커스텀 예외 던지기

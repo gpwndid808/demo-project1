@@ -16,15 +16,16 @@ import java.time.LocalDateTime;
 // TODO [6단계] @Entity 어노테이션 추가하기
 //  - 이 클래스가 JPA 엔티티임을 명시
 //  💡 실습: 아래 어노테이션의 주석을 해제하세요
-// @Entity
+
+@Entity
 public class Comment {
     
     // TODO [6단계] 기본키 설정
     //  - Long 타입의 ID 사용 (Auto Increment)
     //  - @Id와 @GeneratedValue 필수
     //  💡 실습: 아래 어노테이션의 주석을 해제하세요
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     // TODO [6단계] 댓글 내용 필드

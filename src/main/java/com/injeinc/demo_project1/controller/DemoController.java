@@ -2,13 +2,16 @@ package com.injeinc.demo_project1.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 import com.injeinc.demo_project1.service.DemoService;
 
@@ -76,12 +79,20 @@ public class DemoController {
 	// - @PathVariable로 id, @RequestBody로 수정할 내용 받기
 	// - Service의 updateBoard() 메서드 호출
 	// 💡 학습 포인트: 더티 체킹(Dirty Checking)으로 자동 업데이트
+	@PutMapping("/boards/{id}")
+	public Board uptBoard(@PathVariable("id") String id, @RequestBody BoardUpdateDto update) {
+		return demoservice.updateBoard(id, update);
+	}
 
 	// TODO [4단계] 게시글 삭제 API 구현하기
 	// - @DeleteMapping("/boards/{id}") 사용
 	// - Service의 deleteBoard() 메서드 호출
 	// - 삭제 성공 시 적절한 응답 반환 (예: 204 No Content)
 	// 💡 학습 포인트: RESTful API의 HTTP 메서드 규칙
+	@DeleteMapping("/boards/{id}")
+	public void delBoard(@PathVariable("id") String id) {
+		demoservice.deleteBoard(id);
+	}
 
 	// TODO [5단계] 입력값 검증 추가하기
 	//  - @Valid 어노테이션을 @RequestBody 앞에 추가

@@ -35,20 +35,23 @@ public class BoardUpdateDto {
     //  - 제목과 내용만 수정 가능합니다.
     //  - 작성자, 작성일시는 수정되지 않습니다.
     //  💡 고민: 수정자 정보(mdfcnUsrId)는 어떻게 처리할까요?
-    
+	private String boardTitle;
+	private String boardCn;
+	
+	
     // TODO [5단계] 제목 검증 추가하기
     //  - 수정 시에도 제목은 필수입니다.
     //  💡 실습: 아래 어노테이션의 주석을 해제하세요
     // @NotBlank(message = "수정할 제목은 필수입니다.")
     // @Size(min = 1, max = 100, message = "제목은 1~100자 이내여야 합니다.")
-    private String boardTitle;
     
-    // TODO [5단계] 내용 검증 추가하기
+
+	// TODO [5단계] 내용 검증 추가하기
     //  - 수정 시에도 내용은 필수입니다.
     //  💡 실습: 적절한 Validation 어노테이션을 추가하세요
     // @NotBlank(message = "수정할 내용은 필수입니다.")
     // @Size(max = 1000, message = "내용은 1000자 이내여야 합니다.")
-    private String boardCn;
+    
     
     // Getter & Setter
     // TODO [1단계] Lombok으로 대체 가능

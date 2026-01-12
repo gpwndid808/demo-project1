@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 import com.injeinc.demo_project1.repository.BoardRepository;
 
@@ -51,18 +52,40 @@ public class DemoServiceImpl implements DemoService {
     public List<Board> retvLstBoard() {
         return boardRepository.findAll();
     }
+
+
+
+	@Override
+	public Board createBoard(BoardRequestDto request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public void updateBoard(BoardUpdateDto update) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
+
+
+//	@Override
+//	public Board findById(String id) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
     
     // TODO [3단계] 단건 조회 메서드 구현하기
     //  - findById() 메서드 구현
     //  - Optional 처리 필수!
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    /*
+    
     @Override
     public Board findById(String id) {
         return boardRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
     }
-    */
+    
     
     // TODO [5단계] 예외 처리 개선하기
     //  - RuntimeException 대신 BoardNotFoundException 사용
@@ -103,6 +126,17 @@ public class DemoServiceImpl implements DemoService {
         return board;
     }
     */
+	@Transactional
+	@Override
+	public Board updateBoard(String id, BoardUpdateDto dto) {
+		
+		Board board = boardRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
+		
+		board.update(dto.getBoardTitle() , dto.getBoardCn());
+		
+		return board;
+	}
     
     // TODO [4단계] 게시글 삭제 메서드 구현하기
     //  - @Transactional 추가
@@ -118,6 +152,17 @@ public class DemoServiceImpl implements DemoService {
         boardRepository.deleteById(id);
     }
     */
+	@Transactional
+	@Override
+	public void deleteBoard(String id) {
+//		if(!boardRepository.existsById(id){
+//			throw new BoardNotFoundException(id);
+//		}
+		Board board = boardRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
+		
+		boardRepository.deleteById(id);
+	}
     
     // TODO [7단계] 페이징 처리 메서드 구현하기
     //  - Pageable 파라미터 받기

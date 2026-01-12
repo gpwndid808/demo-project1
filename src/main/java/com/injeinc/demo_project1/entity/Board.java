@@ -94,10 +94,11 @@ public class Board {
     //  - 또는 update(String title, String content) 통합 메서드
     //  - @Transactional 내에서 엔티티 필드 변경 시 자동으로 UPDATE 쿼리 실행
     //  💡 예시:
-    //  public void update(String title, String content) {
-    //      this.boardTitle = title;
-    //      this.boardCn = content;
-    //  }
+      public void update(String title, String content) {
+          this.boardTitle = title;
+          this.boardCn = content;
+          this.mdfcnDt = LocalDateTime.now();
+      }
     
     // TODO [6단계] Comment 연관관계 매핑하기
     //  - @OneToMany(mappedBy = "board") List<Comment> comments 필드 추가
