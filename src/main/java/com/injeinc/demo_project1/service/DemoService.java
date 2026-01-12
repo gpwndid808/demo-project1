@@ -37,4 +37,36 @@ public interface DemoService {
 	//  - void deleteBoard(String id); 메서드 선언
 	//  - Repository의 deleteById() 호출
 	//  💡 고민: 물리 삭제 vs 논리 삭제(소프트 삭제)
+	
+	// TODO [5단계] 예외 처리 적용하기
+	//  - 게시글이 없을 때 커스텀 예외 던지기
+	//  - RuntimeException 대신 BoardNotFoundException 사용
+	//  💡 실습: findById 메서드에서 예외 처리
+	//  Board board = boardRepository.findById(id)
+	//      .orElseThrow(() -> new BoardNotFoundException(id));
+	
+	// TODO [7단계] 페이징 처리 메서드 추가하기
+	//  - Page<BoardResponseDto> findAllWithPaging(Pageable pageable);
+	//  - Repository의 findAll(Pageable)을 호출
+	//  - Page<Board>를 Page<BoardResponseDto>로 변환
+	//  💡 실습: Page.map() 메서드 활용
+	//  return boardRepository.findAll(pageable).map(BoardResponseDto::from);
+	
+	// TODO [7단계] 검색 메서드 추가하기
+	//  - Page<BoardResponseDto> searchByTitle(String keyword, Pageable pageable);
+	//  - Repository의 쿼리 메서드 호출
+	//  - 결과를 DTO로 변환하여 반환
+	//  💡 학습 포인트: Entity를 DTO로 변환하는 이유
+	
+	// TODO [7단계] Page.map() 이해하기
+	//  - Stream의 map과 유사한 기능
+	//  - Page<Board> → Page<BoardResponseDto> 변환
+	//  - 페이징 정보는 유지하면서 내용만 변환
+	//  💡 예시: page.map(board -> new BoardResponseDto(board))
+	//  💡 메서드 레퍼런스: page.map(BoardResponseDto::from)
+	
+	// TODO [6단계] 댓글 관련 메서드 추가하기 (선택사항)
+	//  - 댓글 기능은 별도의 CommentService로 분리 권장
+	//  - 또는 BoardService에 댓글 관련 메서드 추가
+	//  💡 고민: Service를 기능별로 나눌까, 도메인별로 나눌까?
 }

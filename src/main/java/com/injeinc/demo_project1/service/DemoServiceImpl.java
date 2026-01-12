@@ -51,55 +51,117 @@ public class DemoServiceImpl implements DemoService {
     public List<Board> retvLstBoard() {
         return boardRepository.findAll();
     }
-
+    
     // TODO [3단계] 단건 조회 메서드 구현하기
-    //  - public Board findById(String id) 메서드 작성
-    //  - boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
-    //  💡 학습 포인트: Optional을 사용한 null 안전성
-    //  💡 5단계에서 커스텀 예외로 개선합니다.
-	@Override
-	public Board findById(String id) {
-		// TODO Auto-generated method stub
-		return boardRepository.findById(id).orElseThrow(() ->
-			new RuntimeException("게시글을 찾을 수 없습니다.")
-		);
-	}
+    //  - findById() 메서드 구현
+    //  - Optional 처리 필수!
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Override
+    public Board findById(String id) {
+        return boardRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
+    }
+    */
+    
+    // TODO [5단계] 예외 처리 개선하기
+    //  - RuntimeException 대신 BoardNotFoundException 사용
+    //  - 더 명확한 예외 메시지 제공
+    //  💡 실습: 위 메서드의 예외를 BoardNotFoundException으로 변경
     
     // TODO [3단계] 게시글 작성 메서드 구현하기
-    //  - public Board createBoard(BoardRequestDto dto) 메서드 작성
-    //  - DTO를 Entity로 변환: Board.builder()...build() 또는 dto.toEntity()
-    //  - boardRepository.save(board);
-    //  - 저장된 엔티티를 반환
-    //  💡 실습: Postman에서 POST 요청으로 테스트
-	@Transactional(readOnly = false)
-	@Override
-	public Board createBoard(BoardRequestDto request) {
-		// TODO Auto-generated method stub
-		Board board = request.toEntity();
-			
-		boardRepository.save(board);
-		return board;
-	}
-	
+    //  - @Transactional 어노테이션 추가 (쓰기 작업)
+    //  - DTO를 Entity로 변환
+    //  - Repository의 save() 메서드 호출
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Transactional
+    @Override
+    public Board createBoard(BoardRequestDto dto) {
+        Board board = dto.toEntity();
+        return boardRepository.save(board);
+    }
+    */
+    
     // TODO [4단계] 게시글 수정 메서드 구현하기 (더티 체킹)
-    //  - @Transactional 어노테이션 추가 (readOnly = false가 기본)
-    //  - public Board updateBoard(String id, BoardUpdateDto dto) 메서드 작성
-    //  - 1) findById()로 엔티티 조회
-    //  - 2) 엔티티의 update() 메서드 호출로 필드 변경
-    //  - 3) save() 호출 없이도 자동으로 UPDATE 쿼리 실행됨 (더티 체킹)
-    //  💡 핵심: @Transactional 안에서 엔티티를 변경하면 JPA가 자동으로 DB에 반영합니다.
-    //  💡 예시:
-    //  @Transactional
-    //  public Board updateBoard(String id, BoardUpdateDto dto) {
-    //      Board board = findById(id);
-    //      board.update(dto.getTitle(), dto.getContent());
-    //      return board; // save() 없이도 UPDATE 됨!
-    //  }
+    //  - @Transactional 필수! (더티 체킹은 트랜잭션 내에서만 동작)
+    //  - findById로 엔티티 조회
+    //  - 엔티티의 update 메서드 호출
+    //  - save() 호출 불필요! (더티 체킹이 자동으로 UPDATE)
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Transactional
+    @Override
+    public Board updateBoard(String id, BoardUpdateDto dto) {
+        Board board = boardRepository.findById(id)
+            .orElseThrow(() -> new BoardNotFoundException(id));
+        
+        // 더티 체킹: 엔티티 필드만 변경하면 자동으로 UPDATE 쿼리 실행!
+        board.update(dto.getBoardTitle(), dto.getBoardCn());
+        
+        // save() 호출 불필요!
+        return board;
+    }
+    */
     
     // TODO [4단계] 게시글 삭제 메서드 구현하기
-    //  - @Transactional 어노테이션 추가
-    //  - public void deleteBoard(String id) 메서드 작성
-    //  - 존재 여부 확인 후 boardRepository.deleteById(id) 호출
-    //  💡 실습: Postman에서 DELETE 요청으로 테스트
-    //  💡 고민: 삭제 전 존재 여부를 확인해야 할까요?
+    //  - @Transactional 추가
+    //  - 존재 여부 확인 후 삭제
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Transactional
+    @Override
+    public void deleteBoard(String id) {
+        if (!boardRepository.existsById(id)) {
+            throw new BoardNotFoundException(id);
+        }
+        boardRepository.deleteById(id);
+    }
+    */
+    
+    // TODO [7단계] 페이징 처리 메서드 구현하기
+    //  - Pageable 파라미터 받기
+    //  - Page<Board>를 Page<BoardResponseDto>로 변환
+    //  - Page.map() 메서드 활용
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Override
+    public Page<BoardResponseDto> findAllWithPaging(Pageable pageable) {
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+        return boardPage.map(BoardResponseDto::from);
+    }
+    */
+    
+    // TODO [7단계] 제목 검색 메서드 구현하기
+    //  - Repository의 쿼리 메서드 호출
+    //  - 페이징과 함께 검색 결과 반환
+    //  💡 실습: 아래 주석을 해제하고 완성하세요
+    /*
+    @Override
+    public Page<BoardResponseDto> searchByTitle(String keyword, Pageable pageable) {
+        Page<Board> boardPage = boardRepository.findByBoardTitleContaining(keyword, pageable);
+        return boardPage.map(BoardResponseDto::from);
+    }
+    */
+    
+    // TODO [7단계] 검색 조건이 복잡한 경우 (심화)
+    //  - 여러 필드를 동시에 검색 (제목 OR 내용)
+    //  - Specification 또는 Querydsl 사용 고려
+    //  💡 실습: 제목 또는 내용에서 검색하는 메서드 작성
+    
+    // TODO [5단계] 공통 로직 추출하기 (리팩토링)
+    //  - findById를 여러 메서드에서 반복 사용
+    //  - private 메서드로 추출하여 코드 중복 제거
+    //  💡 실습:
+    /*
+    private Board findBoardById(String id) {
+        return boardRepository.findById(id)
+            .orElseThrow(() -> new BoardNotFoundException(id));
+    }
+    */
+    
+    // TODO [6단계] 연관관계 조회 최적화하기
+    //  - 게시글과 댓글을 함께 조회할 때 N+1 문제 발생 가능
+    //  - fetch join 또는 @EntityGraph 사용
+    //  💡 학습 포인트: 지연 로딩(LAZY)과 N+1 문제
 }

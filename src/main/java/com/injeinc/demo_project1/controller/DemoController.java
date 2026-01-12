@@ -84,20 +84,117 @@ public class DemoController {
 	// 💡 학습 포인트: RESTful API의 HTTP 메서드 규칙
 
 	// TODO [5단계] 입력값 검증 추가하기
-	// - @Valid 어노테이션을 @RequestBody 앞에 추가
-	// - BindingResult 또는 전역 예외 처리로 검증 오류 처리
-	// 💡 예시: public ResponseDto createBoard(@Valid @RequestBody BoardRequestDto
-	// dto)
+	//  - @Valid 어노테이션을 @RequestBody 앞에 추가
+	//  - 검증 실패 시 GlobalExceptionHandler가 자동으로 처리
+	//  💡 실습: 게시글 작성/수정 API에 @Valid 추가
+	//  💡 예시:
+	//  @PostMapping("/boards")
+	//  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
+	//      return demoService.createBoard(dto);
+	//  }
+	
+	// TODO [5단계] 예외 처리 적용 확인하기
+	//  - 빈 제목으로 게시글 작성 시도 → 400 Bad Request
+	//  - 없는 ID로 조회 시도 → 404 Not Found
+	//  - 콘솔에서 에러 로그 확인
+	//  💡 실습: Postman으로 잘못된 요청 보내보기
 
-	// TODO [7단계] 페이징 처리된 목록 조회 API
-	// - @GetMapping("/boards") 생성
-	// - Pageable 파라미터 추가
-	// - Page<Board> 반환하여 페이지 정보 포함
-	// 💡 테스트: GET /boards?page=0&size=10&sort=rgstrDt,desc
+	// TODO [7단계] 페이징 처리된 목록 조회 API 구현하기
+	//  - Pageable 파라미터로 페이징 정보 받기
+	//  - @PageableDefault로 기본값 설정
+	//  - Page<Board> 또는 Page<BoardResponseDto> 반환
+	//  💡 실습: 아래 코드를 참고하여 구현하세요
+	/*
+	@GetMapping("/api/boards")
+	public Page<BoardResponseDto> getBoards(
+	    @PageableDefault(size = 10, sort = "rgstrDt", direction = Sort.Direction.DESC) 
+	    Pageable pageable) {
+	    return demoService.findAllWithPaging(pageable);
+	}
+	*/
+	
+	// TODO [7단계] Pageable 사용법 이해하기
+	//  - import org.springframework.data.domain.Pageable;
+	//  - import org.springframework.data.domain.Sort;
+	//  - import org.springframework.data.web.PageableDefault;
+	//  - 클라이언트는 쿼리 파라미터로 페이징 정보 전달
+	//  - 예: GET /api/boards?page=0&size=5&sort=boardTitle,asc
+	
+	// TODO [7단계] Page 응답 구조 이해하기
+	//  - content: 실제 데이터 배열
+	//  - pageable: 페이징 정보
+	//  - totalElements: 전체 데이터 개수
+	//  - totalPages: 전체 페이지 수
+	//  - number: 현재 페이지 번호 (0부터 시작)
+	//  - size: 페이지 크기
+	//  - first/last: 첫/마지막 페이지 여부
+	//  💡 학습 포인트: 프론트엔드에서 페이지네이션 UI 구현에 필요한 정보
 
 	// TODO [7단계] 제목 검색 API 구현하기
-	// - @GetMapping("/boards/search") 생성
-	// - @RequestParam으로 검색 키워드 받기
-	// - Repository의 쿼리 메서드 활용
-	// 💡 예시: GET /boards/search?title=스프링
+	//  - @RequestParam으로 검색 키워드 받기
+	//  - required = false로 선택적 파라미터 설정
+	//  💡 실습: 아래 코드를 참고하여 구현하세요
+	/*
+	@GetMapping("/api/boards/search")
+	public Page<BoardResponseDto> searchBoards(
+	    @RequestParam(required = false) String keyword,
+	    Pageable pageable) {
+	    if (keyword == null || keyword.trim().isEmpty()) {
+	        return demoService.findAllWithPaging(pageable);
+	    }
+	    return demoService.searchByTitle(keyword, pageable);
+	}
+	*/
+	
+	// TODO [7단계] @RequestParam 이해하기
+	//  - URL 쿼리 파라미터를 메서드 파라미터로 받기
+	//  - required: 필수 여부 (기본값 true)
+	//  - defaultValue: 값이 없을 때 기본값
+	//  - 예: @RequestParam(defaultValue = "0") int page
+	
+	// TODO [6단계] 댓글 작성 API 구현하기
+	//  - 게시글에 댓글을 추가하는 API
+	//  - POST /api/boards/{boardId}/comments
+	//  💡 실습: 아래 코드를 참고하여 구현하세요
+	/*
+	@PostMapping("/api/boards/{boardId}/comments")
+	public CommentResponseDto createComment(
+	    @PathVariable String boardId,
+	    @Valid @RequestBody CommentRequestDto dto) {
+	    return commentService.createComment(boardId, dto);
+	}
+	*/
+	
+	// TODO [6단계] 게시글의 댓글 목록 조회 API 구현하기
+	//  - 특정 게시글의 모든 댓글 조회
+	//  - GET /api/boards/{boardId}/comments
+	//  💡 실습: 아래 코드를 참고하여 구현하세요
+	/*
+	@GetMapping("/api/boards/{boardId}/comments")
+	public List<CommentResponseDto> getComments(@PathVariable String boardId) {
+	    return commentService.getCommentsByBoardId(boardId);
+	}
+	*/
+	
+	// TODO [6단계] RESTful API 설계 원칙 이해하기
+	//  - /api/boards/{boardId}/comments: 리소스 계층 구조 표현
+	//  - 게시글(boards) 아래에 댓글(comments)이 속함
+	//  - URL로 리소스 간의 관계를 표현
+	//  💡 학습 포인트: RESTful URL 설계 패턴
+	
+	// TODO [7단계] 응답 상태 코드 명시하기 (선택사항)
+	//  - @ResponseStatus로 HTTP 상태 코드 지정
+	//  - ResponseEntity로 더 세밀한 제어
+	//  💡 실습:
+	//  @PostMapping("/api/boards")
+	//  @ResponseStatus(HttpStatus.CREATED)  // 201 Created
+	//  public Board createBoard(@Valid @RequestBody BoardRequestDto dto)
+	
+	// TODO [7단계] ResponseEntity 사용하기 (심화)
+	//  - 헤더, 상태 코드를 포함한 세밀한 응답 제어
+	//  💡 실습:
+	//  public ResponseEntity<Board> createBoard(@Valid @RequestBody BoardRequestDto dto) {
+	//      Board board = demoService.createBoard(dto);
+	//      return ResponseEntity.status(HttpStatus.CREATED).body(board);
+	//  }
 }

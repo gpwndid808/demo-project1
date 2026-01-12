@@ -1,11 +1,15 @@
 package com.injeinc.demo_project1.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -99,6 +103,45 @@ public class Board {
     //  - @OneToMany(mappedBy = "board") List<Comment> comments 필드 추가
     //  - cascade, orphanRemoval 옵션 학습
     //  💡 학습 포인트: 양방향 연관관계 vs 단방향 연관관계
+
+    // TODO [6단계] Comment 연관관계 매핑하기 (양방향)
+    //  - @OneToMany: 게시글(1) : 댓글(N) 관계
+    //  - mappedBy = "board": Comment 엔티티의 board 필드가 연관관계 주인
+    //  - cascade = CascadeType.ALL: 게시글 삭제 시 댓글도 함께 삭제
+    //  - orphanRemoval = true: 컬렉션에서 제거된 댓글 자동 삭제
+    //  💡 학습 포인트: 양방향 vs 단방향 연관관계의 장단점
+    //  💡 실습: 아래 주석을 해제하고 import java.util.ArrayList 추가
+    /*
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+    */
+    
+    // TODO [6단계] cascade 옵션 이해하기
+    //  - ALL: 모든 영속성 전이 (생성, 수정, 삭제 모두)
+    //  - PERSIST: 저장 시에만 전이
+    //  - REMOVE: 삭제 시에만 전이
+    //  💡 주의: cascade = ALL은 신중하게 사용하세요!
+    
+    // TODO [6단계] orphanRemoval 이해하기
+    //  - true: 부모 엔티티와의 관계가 끊어진 자식 엔티티를 자동 삭제
+    //  - 예: board.getComments().remove(comment) → comment 자동 삭제
+    //  💡 학습 포인트: cascade REMOVE와의 차이점
+    
+    // TODO [6단계] 연관관계 편의 메서드 추가하기
+    //  - 양방향 관계를 설정할 때 양쪽을 모두 설정해주는 메서드
+    //  💡 실습: 아래 메서드의 주석을 해제하세요
+    /*
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBoard(this);
+    }
+    */
+    
+    // TODO [6단계] N+1 문제 확인하기
+    //  - 게시글 목록을 조회하면서 각 게시글의 댓글도 조회하면?
+    //  - SELECT 쿼리가 1 + N번 실행됩니다. (성능 문제!)
+    //  - 해결방법: @EntityGraph, fetch join, batch size 설정
+    //  💡 실습: 콘솔에서 SQL 쿼리 개수 확인해보세요
 
     // Getter 메서드들
     // TODO [1단계] Lombok @Getter로 대체 가능
