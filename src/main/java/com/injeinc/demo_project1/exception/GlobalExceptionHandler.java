@@ -1,5 +1,6 @@
 package com.injeinc.demo_project1.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,19 +30,18 @@ public class GlobalExceptionHandler {
     //  - 게시글을 찾지 못했을 때 404 Not Found 응답
     //  - ErrorResponse 객체를 생성하여 반환
     //  💡 실습: 아래 메서드의 주석을 해제하고 완성하세요
-    /*
+    
     @ExceptionHandler(BoardNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBoardNotFound(BoardNotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse("BOARD_NOT_FOUND", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
-    */
+    
     
     // TODO [5단계] Validation 예외 처리하기
     //  - @Valid 검증 실패 시 발생하는 MethodArgumentNotValidException 처리
     //  - BindingResult에서 에러 메시지 추출
     //  💡 실습: 아래 메서드의 주석을 해제하고 완성하세요
-    /*
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
         // 첫 번째 에러 메시지만 추출
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("VALIDATION_ERROR", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-    */
+    
     
     // TODO [5단계] 모든 필드의 검증 에러 반환하기 (심화)
     //  - 여러 필드에서 에러가 발생한 경우 모두 반환
@@ -63,19 +63,24 @@ public class GlobalExceptionHandler {
     //  - 예상하지 못한 모든 예외를 처리하는 fallback 핸들러
     //  - 500 Internal Server Error 응답
     //  💡 주의: 운영 환경에서는 상세한 에러 정보를 노출하지 않도록 주의!
-    /*
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse("INTERNAL_ERROR", "서버 내부 오류가 발생했습니다.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
-    */
+    
     
     // TODO [5단계] 추가 예외 처리 메서드 만들기
     //  - IllegalArgumentException: 잘못된 인자
     //  - DataIntegrityViolationException: DB 제약조건 위반
     //  - AccessDeniedException: 권한 없음 (추후 Security 적용 시)
     //  💡 실습: 필요한 예외 핸들러를 추가로 작성해보세요
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException e){
+    	ErrorResponse errorResponse = new ErrorResponse("DATA_INTEGRITY_VIOLATION", "DB 무결성 제약조건이 위반되었습니다.");
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
     
     // TODO [5단계] HTTP 상태 코드 이해하기
     //  - 200 OK: 성공

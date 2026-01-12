@@ -15,6 +15,7 @@ import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 import com.injeinc.demo_project1.service.DemoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 // TODO [1단계] @RestController 어노테이션 이해하기
@@ -42,7 +43,7 @@ public class DemoController {
 	// - Spring이 DemoService 구현체를 자동으로 주입합니다.
 	// 💡 학습 포인트: @Autowired 없이도 생성자가 하나면 자동 주입됩니다.
 	// 💡 추후 학습: Lombok의 @RequiredArgsConstructor로 간소화 가능
-	private final DemoService demoservice;
+	private final DemoService demoService;
 
 	// TODO [2단계] 기본 조회 API 분석하기
 	// - @GetMapping: HTTP GET 요청을 처리하는 어노테이션
@@ -50,7 +51,7 @@ public class DemoController {
 	// 💡 테스트: Postman이나 브라우저에서 http://localhost:8080/list 호출
 	@GetMapping("/list")
 	public List<Board> retvLstBoard() {
-		return demoservice.retvLstBoard();
+		return demoService.retvLstBoard();
 	}
 
 	// TODO [3단계] 단건 조회 API 구현하기
@@ -60,7 +61,7 @@ public class DemoController {
 	// 💡 예시: GET /boards/1 -> id가 1인 게시글 반환
 	@GetMapping("/boards/{id}")
 	public Board findById(@PathVariable("id") String id) {
-		return demoservice.findById(id);
+		return demoService.findById(id);
 	}
 	
 	// TODO [3단계] 게시글 작성 API 구현하기
@@ -69,10 +70,10 @@ public class DemoController {
 	// - Service의 createBoard() 메서드 호출
 	// - 생성된 Board 엔티티 또는 BoardResponseDto 반환
 	// 💡 학습 포인트: POST는 데이터를 생성할 때 사용하는 HTTP 메서드입니다.
-	@PostMapping("/boards")
-	public Board regtBoard(@RequestBody BoardRequestDto request) {
-		return demoservice.createBoard(request);
-	}
+//	@PostMapping("/boards")
+//	public Board regtBoard(@RequestBody BoardRequestDto request) {
+//		return demoService.createBoard(request);
+//	}
 
 	// TODO [4단계] 게시글 수정 API 구현하기
 	// - @PutMapping("/boards/{id}") 또는 @PatchMapping 사용
@@ -80,8 +81,8 @@ public class DemoController {
 	// - Service의 updateBoard() 메서드 호출
 	// 💡 학습 포인트: 더티 체킹(Dirty Checking)으로 자동 업데이트
 	@PutMapping("/boards/{id}")
-	public Board uptBoard(@PathVariable("id") String id, @RequestBody BoardUpdateDto update) {
-		return demoservice.updateBoard(id, update);
+	public Board uptBoard(@PathVariable("id") String id,@Valid @RequestBody BoardUpdateDto update) {
+		return demoService.updateBoard(id, update);
 	}
 
 	// TODO [4단계] 게시글 삭제 API 구현하기
@@ -91,7 +92,7 @@ public class DemoController {
 	// 💡 학습 포인트: RESTful API의 HTTP 메서드 규칙
 	@DeleteMapping("/boards/{id}")
 	public void delBoard(@PathVariable("id") String id) {
-		demoservice.deleteBoard(id);
+		demoService.deleteBoard(id);
 	}
 
 	// TODO [5단계] 입력값 검증 추가하기
@@ -99,10 +100,10 @@ public class DemoController {
 	//  - 검증 실패 시 GlobalExceptionHandler가 자동으로 처리
 	//  💡 실습: 게시글 작성/수정 API에 @Valid 추가
 	//  💡 예시:
-	//  @PostMapping("/boards")
-	//  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
-	//      return demoService.createBoard(dto);
-	//  }
+	  @PostMapping("/boards")
+	  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
+	      return demoService.createBoard(dto);
+	  }
 	
 	// TODO [5단계] 예외 처리 적용 확인하기
 	//  - 빈 제목으로 게시글 작성 시도 → 400 Bad Request

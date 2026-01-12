@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.injeinc.demo_project1.dto.BoardRequestDto;
 import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
+import com.injeinc.demo_project1.exception.BoardNotFoundException;
 import com.injeinc.demo_project1.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -79,13 +80,14 @@ public class DemoServiceImpl implements DemoService {
     //  - findById() 메서드 구현
     //  - Optional 처리 필수!
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    
-    @Override
-    public Board findById(String id) {
-        return boardRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
-    }
-    
+	
+	@Override 
+	public Board findById(String id) { 
+		
+		return boardRepository.findById(id)
+				.orElseThrow(() -> new BoardNotFoundException(id)); 
+	}
+	 
     
     // TODO [5단계] 예외 처리 개선하기
     //  - RuntimeException 대신 BoardNotFoundException 사용
@@ -131,7 +133,7 @@ public class DemoServiceImpl implements DemoService {
 	public Board updateBoard(String id, BoardUpdateDto dto) {
 		
 		Board board = boardRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
+				.orElseThrow(() -> new BoardNotFoundException(id));
 		
 		board.update(dto.getBoardTitle() , dto.getBoardCn());
 		
@@ -155,11 +157,11 @@ public class DemoServiceImpl implements DemoService {
 	@Transactional
 	@Override
 	public void deleteBoard(String id) {
-//		if(!boardRepository.existsById(id){
-//			throw new BoardNotFoundException(id);
-//		}
-		Board board = boardRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다: " + id));
+		if(!boardRepository.existsById(id)){
+			throw new BoardNotFoundException(id);
+		}
+//		Board board = boardRepository.findById(id)
+//				.orElseThrow(() -> new BoardNotFoundException(id));
 		
 		boardRepository.deleteById(id);
 	}

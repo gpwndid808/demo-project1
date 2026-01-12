@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import com.injeinc.demo_project1.entity.Board;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 // import jakarta.validation.constraints.NotBlank;
 // import jakarta.validation.constraints.Size;
 
@@ -42,12 +45,12 @@ public class BoardRequestDto {
     //  💡 고민: 작성자 정보는 어떻게 받을까요?
 	private Long boardId;
 	
-    // @NotBlank(message = "제목은 필수입니다.")
-    // @Size(min = 1, max = 100, message = "제목은 1~100자 이내여야 합니다.")
+    @NotBlank(message = "제목은 필수입니다.")
+    @Size(min = 1, max = 100, message = "제목은 1~100자 이내여야 합니다.")
     private String boardTitle;
     
-    // @NotBlank(message = "내용은 필수입니다.")
-    // @Size(max = 1000, message = "내용은 1000자 이내여야 합니다.")
+    @NotBlank(message = "내용은 필수입니다.")
+    @Size(max = 1000, message = "내용은 1000자 이내여야 합니다.")
     private String boardCn;
     
     private String rgstrUsrId;

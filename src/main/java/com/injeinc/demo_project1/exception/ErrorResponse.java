@@ -1,5 +1,13 @@
 package com.injeinc.demo_project1.exception;
 
+import java.security.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 // TODO [5단계] 에러 응답 DTO 만들기
 //  - 클라이언트에게 일관된 형식의 에러 정보를 전달합니다.
 //  - 에러 코드, 메시지 등을 포함합니다.
@@ -11,6 +19,9 @@ package com.injeinc.demo_project1.exception;
 //  - @Builder: 빌더 패턴 적용
 //  💡 실습: Lombok 어노테이션 추가 후 수동 코드 제거
 
+//@AllArgsConstructor
+//@Getter
+//@Setter
 public class ErrorResponse {
     
     // TODO [5단계] 에러 응답 필드 정의
@@ -29,17 +40,21 @@ public class ErrorResponse {
     public ErrorResponse(String code, String message) {
         this.code = code;
         this.message = message;
+        this.timestamp = LocalDateTime.now();
     }
     
     // TODO [5단계] 타임스탬프 추가하기 (선택사항)
     //  - 에러 발생 시간을 기록
     //  - private LocalDateTime timestamp;
     //  - 생성자에서 LocalDateTime.now()로 초기화
+    private LocalDateTime timestamp;
     
     // TODO [5단계] 상세 정보 추가하기 (선택사항)
     //  - private List<String> details; // 여러 개의 에러 메시지
     //  - private String path; // 에러가 발생한 API 경로
     //  💡 실습: Validation 에러 시 여러 필드의 에러를 한 번에 반환
+//    private List<String> details;
+//    private String path;
     
     // Getter
     // TODO [1단계] Lombok @Getter로 대체 가능

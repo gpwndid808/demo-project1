@@ -85,7 +85,7 @@ dependencies {
     // TODO [5단계] Validation 의존성 추가
     //  - @Valid, @NotBlank 등 입력값 검증
     //  💡 실습: 5단계에서 아래 의존성 추가
-    // implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     
     // TODO [10단계] SpringDoc (Swagger) 추가
     //  - API 문서 자동 생성
