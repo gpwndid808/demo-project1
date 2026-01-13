@@ -2,12 +2,17 @@ package com.injeinc.demo_project1.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -135,10 +140,11 @@ public class DemoController {
 		@ApiResponse(responseCode = "400", description = "잘못된 요청 (Validation 실패)")
 	})
 	*/
-//	@PostMapping("/boards")
-//	public Board regtBoard(@RequestBody BoardRequestDto request) {
-//		return demoService.createBoard(request);
-//	}
+	
+	@PostMapping("/boards")
+	public Board regtBoard(@RequestBody BoardRequestDto request) {
+		return demoService.createBoard(request);
+	}
 
 	// TODO [4단계] 게시글 수정 API 구현하기
 	// - @PutMapping("/boards/{id}") 또는 @PatchMapping 사용
@@ -165,11 +171,11 @@ public class DemoController {
 	//  - 검증 실패 시 GlobalExceptionHandler가 자동으로 처리
 	//  💡 실습: 게시글 작성/수정 API에 @Valid 추가
 	//  💡 예시:
-	  @PostMapping("/boards")
-	  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
-	      return demoService.createBoard(dto);
-	  }
-	
+//	  @PostMapping("/boards")
+//	  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
+//	      return demoService.createBoard(dto);
+//	  }
+//	
 	// TODO [5단계] 예외 처리 적용 확인하기
 	//  - 빈 제목으로 게시글 작성 시도 → 400 Bad Request
 	//  - 없는 ID로 조회 시도 → 404 Not Found
@@ -181,16 +187,16 @@ public class DemoController {
 	//  - @PageableDefault로 기본값 설정
 	//  - Page<Board> 또는 Page<BoardResponseDto> 반환
 	//  💡 실습: 아래 코드를 참고하여 구현하세요
-	/*
+	
 	@GetMapping("/api/boards")
 	public Page<BoardResponseDto> getBoards(
 	    @PageableDefault(size = 10, sort = "rgstrDt", direction = Sort.Direction.DESC) 
 	    Pageable pageable) {
 	    return demoService.findAllWithPaging(pageable);
 	}
-	*/
 	
 	// TODO [7단계] Pageable 사용법 이해하기
+	//	- import org.springframework.data.domain.Page;
 	//  - import org.springframework.data.domain.Pageable;
 	//  - import org.springframework.data.domain.Sort;
 	//  - import org.springframework.data.web.PageableDefault;
@@ -211,17 +217,21 @@ public class DemoController {
 	//  - @RequestParam으로 검색 키워드 받기
 	//  - required = false로 선택적 파라미터 설정
 	//  💡 실습: 아래 코드를 참고하여 구현하세요
-	/*
 	@GetMapping("/api/boards/search")
 	public Page<BoardResponseDto> searchBoards(
-	    @RequestParam(required = false) String keyword,
-	    Pageable pageable) {
+	    @RequestParam(name = "keyword", required = false) String keyword, Pageable pageable) {
 	    if (keyword == null || keyword.trim().isEmpty()) {
 	        return demoService.findAllWithPaging(pageable);
 	    }
 	    return demoService.searchByTitle(keyword, pageable);
 	}
-	*/
+	
+	@GetMapping("/api/boards/searchByKeyword")
+	public List<BoardResponseDto> searchByKeyword(@RequestParam(name = "keyword") String keyword){
+		List<Board> board =  demoService.searchByKeyword(keyword);
+		 return board.stream().map(BoardResponseDto::from).toList();
+	}
+	
 	
 	// TODO [7단계] @RequestParam 이해하기
 	//  - URL 쿼리 파라미터를 메서드 파라미터로 받기

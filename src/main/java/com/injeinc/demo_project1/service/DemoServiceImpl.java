@@ -2,10 +2,13 @@ package com.injeinc.demo_project1.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardResponseDto;
 import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 import com.injeinc.demo_project1.exception.BoardNotFoundException;
@@ -56,11 +59,11 @@ public class DemoServiceImpl implements DemoService {
 
 
 
-	@Override
-	public Board createBoard(BoardRequestDto request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Board createBoard(BoardRequestDto request) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 //	@Override
 //	public void updateBoard(BoardUpdateDto update) {
@@ -99,14 +102,14 @@ public class DemoServiceImpl implements DemoService {
     //  - DTO를 Entity로 변환
     //  - Repository의 save() 메서드 호출
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    /*
+    
     @Transactional
     @Override
     public Board createBoard(BoardRequestDto dto) {
         Board board = dto.toEntity();
         return boardRepository.save(board);
     }
-    */
+    
     
     // TODO [4단계] 게시글 수정 메서드 구현하기 (더티 체킹)
     //  - @Transactional 필수! (더티 체킹은 트랜잭션 내에서만 동작)
@@ -171,31 +174,33 @@ public class DemoServiceImpl implements DemoService {
     //  - Page<Board>를 Page<BoardResponseDto>로 변환
     //  - Page.map() 메서드 활용
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    /*
+    
     @Override
     public Page<BoardResponseDto> findAllWithPaging(Pageable pageable) {
         Page<Board> boardPage = boardRepository.findAll(pageable);
         return boardPage.map(BoardResponseDto::from);
     }
-    */
     
     // TODO [7단계] 제목 검색 메서드 구현하기
     //  - Repository의 쿼리 메서드 호출
     //  - 페이징과 함께 검색 결과 반환
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    /*
+    
+    @Transactional
     @Override
     public Page<BoardResponseDto> searchByTitle(String keyword, Pageable pageable) {
         Page<Board> boardPage = boardRepository.findByBoardTitleContaining(keyword, pageable);
         return boardPage.map(BoardResponseDto::from);
     }
-    */
     
     // TODO [7단계] 검색 조건이 복잡한 경우 (심화)
     //  - 여러 필드를 동시에 검색 (제목 OR 내용)
     //  - Specification 또는 Querydsl 사용 고려
     //  💡 실습: 제목 또는 내용에서 검색하는 메서드 작성
-    
+    public List<Board> searchByKeyword(String keyword){
+    	
+    	return boardRepository.searchByKeyword(keyword);
+    }
     // TODO [5단계] 공통 로직 추출하기 (리팩토링)
     //  - findById를 여러 메서드에서 반복 사용
     //  - private 메서드로 추출하여 코드 중복 제거
