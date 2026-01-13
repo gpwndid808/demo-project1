@@ -29,6 +29,13 @@ import lombok.Setter;
 //  - @Builder 어노테이션 추가하여 빌더 패턴 사용
 //  💡 학습 포인트: Lombok은 반복적인 코드를 자동 생성해줍니다.
 
+// TODO [8단계] BaseTimeEntity 상속 적용하기
+//  - BaseTimeEntity를 생성한 후 이 클래스가 상속받도록 수정
+//  - rgstrDt, mdfcnDt 필드를 제거 (BaseTimeEntity에서 제공)
+//  - @EnableJpaAuditing을 메인 클래스에 추가
+//  💡 실습: public class Board extends BaseTimeEntity { ... }
+//  💡 학습 포인트: 상속을 통한 코드 재사용
+
 @Entity
 @Getter
 @Setter
@@ -60,11 +67,11 @@ public class Board {
     //  - mdfcnUsrId: 수정 사용자 ID
     //  💡 8단계에 Spring Security 적용 시 자동화 가능
     private String rgstrUsrId;
-    private String mdfcnUsrId;
-
-    // TODO [8단계] BaseTimeEntity로 이동 예정
-    //  - 생성일시, 수정일시는 모든 엔티티에서 공통으로 사용
-    //  - BaseTimeEntity를 만들어 상속받는 구조로 리팩토링
+    private String mdfcnUsrId;    // TODO [8단계] BaseTimeEntity 상속 후 제거할 필드
+    //  - BaseTimeEntity를 상속받으면 이 필드들은 자동으로 관리됩니다.
+    //  - createdDate, modifiedDate로 자동 변환됩니다.
+    //  💡 실습: BaseTimeEntity 상속 후 아래 두 필드 삭제
+    //  💡 주의: DTO에서 이 필드를 사용하는 부분도 수정 필요
     private LocalDateTime rgstrDt;
     private LocalDateTime mdfcnDt;
 
