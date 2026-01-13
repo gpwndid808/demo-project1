@@ -10,20 +10,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO [10단계] Swagger 어노테이션 import하기
-//  - API 문서화를 위한 어노테이션들
-//  💡 실습: 아래 import 문의 주석을 해제하세요
-// import io.swagger.v3.oas.annotations.Operation;
-// import io.swagger.v3.oas.annotations.Parameter;
-// import io.swagger.v3.oas.annotations.responses.ApiResponse;
-// import io.swagger.v3.oas.annotations.responses.ApiResponses;
-// import io.swagger.v3.oas.annotations.tags.Tag;
-// import io.swagger.v3.oas.annotations.media.Content;
-// import io.swagger.v3.oas.annotations.media.Schema;
-
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardResponseDto;
 import com.injeinc.demo_project1.dto.BoardUpdateDto;
+import com.injeinc.demo_project1.dto.CommentRequestDto;
+import com.injeinc.demo_project1.dto.CommentResponseDto;
 import com.injeinc.demo_project1.entity.Board;
+import com.injeinc.demo_project1.entity.Comment;
+import com.injeinc.demo_project1.service.CommentService;
 import com.injeinc.demo_project1.service.DemoService;
 
 import jakarta.validation.Valid;
@@ -34,11 +28,7 @@ import lombok.RequiredArgsConstructor;
 //  - 모든 메서드가 JSON 형태로 데이터를 반환합니다.1단계
 //  💡 학습 포인트: REST API를 만들 때 사용하는 핵심 어노테이션입니다.
 
-// TODO [10단계] @Tag로 API 그룹 설명 추가하기
-//  - Swagger UI에서 컨트롤러 단위로 그룹화
-//  - API의 전반적인 설명 제공
-//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-// @Tag(name = "게시판 API", description = "게시판 CRUD 관련 API를 제공합니다.")
+
 @RequiredArgsConstructor
 @RestController
 public class DemoController {
@@ -59,76 +49,41 @@ public class DemoController {
 	// 💡 학습 포인트: @Autowired 없이도 생성자가 하나면 자동 주입됩니다.
 	// 💡 추후 학습: Lombok의 @RequiredArgsConstructor로 간소화 가능
 	private final DemoService demoService;
+	private final CommentService commentService;
 
 	// TODO [2단계] 기본 조회 API 분석하기
-	//  - @GetMapping: HTTP GET 요청을 처리하는 어노테이션
-	//  - "/list" 경로로 요청 시 모든 게시글 목록을 반환
-	//  💡 테스트: Postman이나 브라우저에서 http://localhost:8080/list 호출
-	
-	// TODO [10단계] @Operation으로 API 설명 추가하기
-	//  - Swagger UI에서 API의 요약과 상세 설명 표시
-	//  - summary: 간단한 요약
-	//  - description: 상세 설명
-	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
-	@Operation(
-		summary = "게시글 목록 조회",
-		description = "모든 게시글 목록을 조회합니다. 페이징 없이 전체 목록을 반환합니다."
-	)
-	*/
+	// - @GetMapping: HTTP GET 요청을 처리하는 어노테이션
+	// - "/list" 경로로 요청 시 모든 게시글 목록을 반환
+	// 💡 테스트: Postman이나 브라우저에서 http://localhost:8080/list 호출
+	// 엔티티로 받게되면 JSON을 만드려고 직렬화하는 순간 양방향 연관관계 때문에 무한 루프가 돌면서 오류, 그래서 dto 로 받도록 수정 !!
 	@GetMapping("/list")
-	public List<Board> retvLstBoard() {
-		return demoService.retvLstBoard();
+	public List<BoardResponseDto> retvLstBoard() {
+		List<Board> boards = demoService.retvLstBoard();
+		return boards.stream().map(BoardResponseDto::from).toList();
 	}
 
 	// TODO [3단계] 단건 조회 API 구현하기
-	//  - @GetMapping("/boards/{id}") 형태로 경로 변수 사용
-	//  - @PathVariable 어노테이션으로 id 값 받기
-	//  - Service에서 findById()를 호출하여 특정 게시글 조회
-	//  💡 예시: GET /boards/1 -> id가 1인 게시글 반환
-	
-	// TODO [10단계] @Parameter로 파라미터 설명 추가하기
-	//  - 경로 변수에 대한 설명 제공
-	//  - required: 필수 여부
-	//  - example: 예시 값
-	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
-	@Operation(summary = "게시글 단건 조회", description = "ID로 특정 게시글을 조회합니다.")
-	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "조회 성공"),
-		@ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음")
-	})
-	*/
+	// - @GetMapping("/boards/{id}") 형태로 경로 변수 사용
+	// - @PathVariable 어노테이션으로 id 값 받기
+	// - Service에서 findById()를 호출하여 특정 게시글 조회
+	// 💡 예시: GET /boards/1 -> id가 1인 게시글 반환
 	@GetMapping("/boards/{id}")
-	public Board findById(
-		// @Parameter(description = "게시글 ID", required = true, example = "1")
-		@PathVariable("id") String id) {
-		return demoService.findById(id);
+	public BoardResponseDto findById(@PathVariable("id") String id) {
+		
+		Board board = demoService.findById(id);
+		return BoardResponseDto.from(board);
 	}
 	
 	// TODO [3단계] 게시글 작성 API 구현하기
-	//  - @PostMapping("/boards") 어노테이션 사용
-	//  - @RequestBody로 BoardRequestDto 객체 받기
-	//  - Service의 createBoard() 메서드 호출
-	//  - 생성된 Board 엔티티 또는 BoardResponseDto 반환
-	//  💡 학습 포인트: POST는 데이터를 생성할 때 사용하는 HTTP 메서드입니다.
-	
-	// TODO [10단계] @ApiResponses로 응답 상태 코드 설명 추가하기
-	//  - 가능한 HTTP 응답 코드와 설명 제공
-	//  - 200: 성공, 400: 잘못된 요청, 404: 찾을 수 없음 등
-	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
-	@Operation(summary = "게시글 작성", description = "새로운 게시글을 작성합니다.")
-	@ApiResponses({
-		@ApiResponse(responseCode = "201", description = "생성 성공",
-			content = @Content(schema = @Schema(implementation = Board.class))),
-		@ApiResponse(responseCode = "400", description = "잘못된 요청 (Validation 실패)")
-	})
-	*/
-	  @PostMapping("/boards")
-	  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
-	      return demoService.createBoard(dto);
-	  }
+	// - @PostMapping("/boards") 어노테이션 사용
+	// - @RequestBody로 BoardRequestDto 객체 받기
+	// - Service의 createBoard() 메서드 호출
+	// - 생성된 Board 엔티티 또는 BoardResponseDto 반환
+	// 💡 학습 포인트: POST는 데이터를 생성할 때 사용하는 HTTP 메서드입니다.
+//	@PostMapping("/boards")
+//	public Board regtBoard(@RequestBody BoardRequestDto request) {
+//		return demoService.createBoard(request);
+//	}
 
 	// TODO [4단계] 게시글 수정 API 구현하기
 	// - @PutMapping("/boards/{id}") 또는 @PatchMapping 사용
@@ -155,6 +110,10 @@ public class DemoController {
 	//  - 검증 실패 시 GlobalExceptionHandler가 자동으로 처리
 	//  💡 실습: 게시글 작성/수정 API에 @Valid 추가
 	//  💡 예시:
+	  @PostMapping("/boards")
+	  public Board createBoard(@Valid @RequestBody BoardRequestDto dto) {
+	      return demoService.createBoard(dto);
+	  }
 	
 	// TODO [5단계] 예외 처리 적용 확인하기
 	//  - 빈 제목으로 게시글 작성 시도 → 400 Bad Request
@@ -219,25 +178,37 @@ public class DemoController {
 	//  - 게시글에 댓글을 추가하는 API
 	//  - POST /api/boards/{boardId}/comments
 	//  💡 실습: 아래 코드를 참고하여 구현하세요
-	/*
+	
 	@PostMapping("/api/boards/{boardId}/comments")
-	public CommentResponseDto createComment(
-	    @PathVariable String boardId,
-	    @Valid @RequestBody CommentRequestDto dto) {
-	    return commentService.createComment(boardId, dto);
+	public CommentResponseDto createComment(@PathVariable("boardId") String boardId, @Valid @RequestBody CommentRequestDto dto) {
+		Comment comment = commentService.createComment(boardId, dto);
+		return CommentResponseDto.from(comment);
 	}
-	*/
+	
 	
 	// TODO [6단계] 게시글의 댓글 목록 조회 API 구현하기
 	//  - 특정 게시글의 모든 댓글 조회
 	//  - GET /api/boards/{boardId}/comments
 	//  💡 실습: 아래 코드를 참고하여 구현하세요
-	/*
+	
 	@GetMapping("/api/boards/{boardId}/comments")
-	public List<CommentResponseDto> getComments(@PathVariable String boardId) {
-	    return commentService.getCommentsByBoardId(boardId);
+	public List<CommentResponseDto> getComments(@PathVariable("boardId") String boardId) {
+		List<Comment> comments = commentService.getCommentsByBoardId(boardId);
+		return comments.stream().map(CommentResponseDto::from).toList();
 	}
-	*/
+	
+	@GetMapping("/api/boards/{writer}/commentsByWriter")
+	public List<CommentResponseDto> getCommentsByWriter(@PathVariable("writer") String writer){
+		
+		List<Comment> comments = commentService.getCommentsByWriter(writer);
+		return comments.stream().map(CommentResponseDto::from).toList();
+	}
+	
+	@DeleteMapping("/api/boards/comment/{commentNum}")
+	public void deleteComment(@PathVariable("commentNum") Long commentNum) {
+		
+		commentService.deleteComment(commentNum);
+	}
 	
 	// TODO [6단계] RESTful API 설계 원칙 이해하기
 	//  - /api/boards/{boardId}/comments: 리소스 계층 구조 표현
@@ -260,13 +231,4 @@ public class DemoController {
 	//      Board board = demoService.createBoard(dto);
 	//      return ResponseEntity.status(HttpStatus.CREATED).body(board);
 	//  }
-
-	// TODO [10단계] Swagger 어노테이션 import하기
-	//  - API 문서화를 위한 어노테이션들
-	//  💡 실습: 아래 import 문의 주석을 해제하세요
-	// import io.swagger.v3.oas.annotations.Operation;
-	// import io.swagger.v3.oas.annotations.Parameter;
-	// import io.swagger.v3.oas.annotations.responses.ApiResponse;
-	// import io.swagger.v3.oas.annotations.responses.ApiResponses;
-	// import io.swagger.v3.oas.annotations.tags.Tag;
 }

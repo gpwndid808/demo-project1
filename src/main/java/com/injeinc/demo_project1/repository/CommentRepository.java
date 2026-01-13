@@ -19,7 +19,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     //  - 특정 게시글의 모든 댓글을 조회하는 메서드
     //  - 메서드 이름으로 자동 쿼리 생성
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // List<Comment> findByBoardBoardId(String boardId);
+     List<Comment> findByBoardBoardId(String boardId);
     
     // TODO [6단계] 쿼리 메서드 네이밍 이해하기
     //  - findByBoard_BoardId: Board의 boardId로 검색
@@ -29,23 +29,22 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     // TODO [6단계] 정렬 추가하기
     //  - 최신 댓글 먼저 조회
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // List<Comment> findByBoardBoardIdOrderByCreatedDateDesc(String boardId);
+    List <Comment> findByBoardBoardIdOrderByRgstrDtDesc(String boardId);
     
     // TODO [6단계] 작성자로 댓글 찾기
     //  - 특정 사용자가 작성한 모든 댓글 조회
     //  💡 실습: 적절한 메서드명을 작성하세요
-    // List<Comment> findByWriter(String writer);
+     List<Comment> findByWriter(String writer);
     
     // TODO [6단계] 게시글별 댓글 개수 세기
     //  - 특정 게시글의 댓글 개수 조회
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // long countByBoardBoardId(String boardId);
+     long countByBoardBoardId(String boardId);
     
     // TODO [6단계] 댓글 삭제 (게시글 기준)
     //  - 특정 게시글의 모든 댓글 삭제
     //  - cascade 옵션으로도 가능하지만 직접 삭제도 가능
     //  💡 주의: @Modifying, @Transactional 필요
-    // void deleteByBoardBoardId(String boardId);
     
     // TODO [7단계] 페이징 적용하기
     //  - 댓글이 많을 경우 페이징 처리

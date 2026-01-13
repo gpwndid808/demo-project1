@@ -40,12 +40,12 @@ public class BoardResponseDto {
     //  - Entity를 받아서 DTO로 변환하는 생성자입니다.
     //  - Service에서 사용합니다.
     //  💡 예시:
-      public BoardResponseDto(Board board) {
-          this.boardId = board.getBoardId();
-          this.boardTitle = board.getBoardTitle();
-          this.rgstrUsrId = board.getRgstrUsrId();
-      }
-    
+//      public BoardResponseDto(Board board) {
+//          this.boardId = board.getBoardId();
+//          this.boardTitle = board.getBoardTitle();
+//          this.rgstrUsrId = board.getRgstrUsrId();
+//      }
+//    
     // TODO [3단계] 정적 팩토리 메서드 패턴 (권장)
     //  - 생성자 대신 정적 메서드를 사용하여 의미를 명확히 합니다.
     //  💡 예시:

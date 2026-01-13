@@ -119,10 +119,10 @@ public class Board {
     //  - orphanRemoval = true: 컬렉션에서 제거된 댓글 자동 삭제
     //  💡 학습 포인트: 양방향 vs 단방향 연관관계의 장단점
     //  💡 실습: 아래 주석을 해제하고 import java.util.ArrayList 추가
-    /*
+    
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-    */
+    
     
     // TODO [6단계] cascade 옵션 이해하기
     //  - ALL: 모든 영속성 전이 (생성, 수정, 삭제 모두)
@@ -138,12 +138,12 @@ public class Board {
     // TODO [6단계] 연관관계 편의 메서드 추가하기
     //  - 양방향 관계를 설정할 때 양쪽을 모두 설정해주는 메서드
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    /*
+    
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setBoard(this);
     }
-    */
+    
     
     // TODO [6단계] N+1 문제 확인하기
     //  - 게시글 목록을 조회하면서 각 게시글의 댓글도 조회하면?
