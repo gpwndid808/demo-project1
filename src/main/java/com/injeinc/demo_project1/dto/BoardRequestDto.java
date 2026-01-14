@@ -66,8 +66,6 @@ public class BoardRequestDto {
 			.boardCn(this.boardCn)
 			.rgstrUsrId(this.rgstrUsrId)
 			.mdfcnUsrId(this.mdfcnUsrId)
-			.rgstrDt(LocalDateTime.now())
-	        .mdfcnDt(LocalDateTime.now())
 			.build();
     }
     

@@ -51,6 +51,7 @@ public class BoardUpdateDto {
      @Size(max = 1000, message = "내용은 1000자 이내여야 합니다.")
      private String boardCn;
      
+     private String mdfcnUsrId;
     // Getter & Setter
     // TODO [1단계] Lombok으로 대체 가능
 }

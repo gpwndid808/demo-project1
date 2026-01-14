@@ -29,7 +29,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     // TODO [6단계] 정렬 추가하기
     //  - 최신 댓글 먼저 조회
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    List <Comment> findByBoardBoardIdOrderByRgstrDtDesc(String boardId);
+    List <Comment> findByBoardBoardIdOrderByCreatedDateDesc(String boardId);
     
     // TODO [6단계] 작성자로 댓글 찾기
     //  - 특정 사용자가 작성한 모든 댓글 조회

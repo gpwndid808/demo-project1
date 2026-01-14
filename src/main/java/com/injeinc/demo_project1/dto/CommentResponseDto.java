@@ -33,8 +33,8 @@ public class CommentResponseDto {
     		.boardId(comment.getBoardId())
     		.comment(comment.getComment())
     		.writer(comment.getWriter())
-    		.rgstrDt(comment.getRgstrDt())
-    		.mdfcnDt(comment.getMdfcnDt())
+    		.rgstrDt(comment.getCreatedDate())
+    		.mdfcnDt(comment.getModifiedDate())
     		.build();
     }
 }

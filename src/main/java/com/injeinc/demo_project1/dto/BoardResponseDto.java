@@ -55,8 +55,8 @@ public class BoardResponseDto {
               .boardTitle(board.getBoardTitle())
               .boardCn(board.getBoardCn())
               .rgstrUsrId(board.getRgstrUsrId())
-              .rgstrDt(board.getRgstrDt())
-              .mdfcnDt(board.getMdfcnDt())
+              .rgstrDt(board.getCreatedDate())
+              .mdfcnDt(board.getModifiedDate())
               .build();
       }
     

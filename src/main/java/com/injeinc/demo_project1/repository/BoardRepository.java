@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,7 +53,7 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     // TODO [7단계] 정렬 추가하기
     //  - OrderBy + 필드명 + Asc/Desc
     //  💡 실습: 최신 게시글 먼저 조회하기
-     List<Board> findByBoardTitleContainingOrderByRgstrDtDesc(String keyword);
+     List<Board> findByBoardTitleContainingOrderByCreatedDateDesc(String keyword);
     
     // TODO [7단계] 페이징 처리하기 (핵심!)
     //  - Pageable 파라미터를 추가하면 자동으로 페이징 처리
@@ -60,7 +61,7 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     //  - import org.springframework.data.domain.Pageable;
     //  💡 실습: 아래 메서드의 주석을 해제하세요
     
-    Page<Board> findAll(Pageable pageable);
+//    Page<Board> findAll(Pageable pageable);
     Page<Board> findByBoardTitleContaining(String keyword, Pageable pageable);
     
     
@@ -102,8 +103,8 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     // TODO [7단계] @EntityGraph로 N+1 문제 해결하기 (심화)
     //  - 연관된 엔티티를 한 번에 조회
     //  💡 실습:
-    //  @EntityGraph(attributePaths = {"comments"})
-    //  Page<Board> findAll(Pageable pageable);
+      @EntityGraph(attributePaths = {"comments"})
+      Page<Board> findAll(Pageable pageable);
     
     // TODO [9단계] 테스트 작성하기
     //  - BoardRepositoryTest 클래스 생성

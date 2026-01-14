@@ -138,7 +138,7 @@ public class DemoServiceImpl implements DemoService {
 		Board board = boardRepository.findById(id)
 				.orElseThrow(() -> new BoardNotFoundException(id));
 		
-		board.update(dto.getBoardTitle() , dto.getBoardCn());
+		board.update(dto.getBoardTitle() , dto.getBoardCn(), dto.getMdfcnUsrId());
 		
 		return board;
 	}

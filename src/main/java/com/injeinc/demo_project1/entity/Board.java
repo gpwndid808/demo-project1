@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,8 +44,9 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EnableJpaAuditing
 @Table(name = "board")
-public class Board {
+public class Board extends BaseTimeEntity{
 
     // TODO [2단계] @Id와 @GeneratedValue 이해하기
     //  - @Id: 기본키(Primary Key) 지정
@@ -67,13 +70,15 @@ public class Board {
     //  - mdfcnUsrId: 수정 사용자 ID
     //  💡 8단계에 Spring Security 적용 시 자동화 가능
     private String rgstrUsrId;
-    private String mdfcnUsrId;    // TODO [8단계] BaseTimeEntity 상속 후 제거할 필드
+    private String mdfcnUsrId;    
+    
+    // TODO [8단계] BaseTimeEntity 상속 후 제거할 필드
     //  - BaseTimeEntity를 상속받으면 이 필드들은 자동으로 관리됩니다.
     //  - createdDate, modifiedDate로 자동 변환됩니다.
     //  💡 실습: BaseTimeEntity 상속 후 아래 두 필드 삭제
     //  💡 주의: DTO에서 이 필드를 사용하는 부분도 수정 필요
-    private LocalDateTime rgstrDt;
-    private LocalDateTime mdfcnDt;
+//    private LocalDateTime rgstrDt;
+//    private LocalDateTime mdfcnDt;
 
     // TODO [2단계] 기본 생성자의 중요성
     //  - JPA는 리플렉션을 사용하므로 기본 생성자 필수
@@ -91,8 +96,8 @@ public class Board {
                 .boardCn(content)
                 .rgstrUsrId(rgstrUsrId)
                 .mdfcnUsrId(mdfcnUsrId)
-                .rgstrDt(LocalDateTime.now())
-                .mdfcnDt(LocalDateTime.now())
+//                .rgstrDt(LocalDateTime.now())
+//                .mdfcnDt(LocalDateTime.now())
                 .build();
     }
     
@@ -101,10 +106,11 @@ public class Board {
     //  - 또는 update(String title, String content) 통합 메서드
     //  - @Transactional 내에서 엔티티 필드 변경 시 자동으로 UPDATE 쿼리 실행
     //  💡 예시:
-      public void update(String title, String content) {
+      public void update(String title, String content, String mdfcnUsrId) {
           this.boardTitle = title;
           this.boardCn = content;
-          this.mdfcnDt = LocalDateTime.now();
+          this.mdfcnUsrId = mdfcnUsrId;
+//          this.mdfcnDt = LocalDateTime.now();
       }
     
     // TODO [6단계] Comment 연관관계 매핑하기

@@ -3,6 +3,8 @@ package com.injeinc.demo_project1.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 //  💡 실습: 메인 클래스에 @EnableJpaAuditing 추가
 
 @MappedSuperclass
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
     
@@ -35,7 +38,7 @@ public abstract class BaseTimeEntity {
     //  - updatable = false: 이후 수정되지 않도록 보호
     //  💡 학습 포인트: 생성 시간은 변경되면 안 됩니다!
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, name  = "rgstr_dt")
     private LocalDateTime createdDate;
     
     // TODO [8단계] @LastModifiedDate 이해하기
@@ -43,6 +46,7 @@ public abstract class BaseTimeEntity {
     //  - 더티 체킹으로 필드가 변경되면 자동 업데이트
     //  💡 학습 포인트: 수정 시간은 자동으로 관리됩니다!
     @LastModifiedDate
+    @Column(name  = "mdfcn_dt")
     private LocalDateTime modifiedDate;
     
     // TODO [8단계] LocalDateTime vs Date
@@ -54,13 +58,13 @@ public abstract class BaseTimeEntity {
     //  - 생성/수정 시간을 조회할 수 있도록 getter 제공
     //  - setter는 제공하지 않음 (자동으로 설정되므로)
     //  💡 실습: Lombok의 @Getter 사용 가능
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-    
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
+//    public LocalDateTime getCreatedDate() {
+//        return createdDate;
+//    }
+//    
+//    public LocalDateTime getModifiedDate() {
+//        return modifiedDate;
+//    }
     
     // TODO [8단계] 작성자/수정자 정보도 자동화하기 (심화)
     //  - @CreatedBy: 생성자 자동 설정

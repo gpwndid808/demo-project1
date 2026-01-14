@@ -28,7 +28,7 @@ import jakarta.persistence.ManyToOne;
 //  💡 실습: 아래 어노테이션의 주석을 해제하세요
 
 @Entity
-public class Comment {
+public class Comment extends BaseTimeEntity{
     
     // TODO [6단계] 기본키 설정
     //  - Long 타입의 ID 사용 (Auto Increment)
@@ -54,8 +54,8 @@ public class Comment {
     // TODO [6단계] 작성시간, 수정시간
     //  - 8단계에서 BaseTimeEntity를 상속받으면 자동 관리됩니다.
     //  - 지금은 수동으로 추가하거나 생략 가능
-    private LocalDateTime rgstrDt;
-    private LocalDateTime mdfcnDt;
+//    private LocalDateTime rgstrDt;
+//    private LocalDateTime mdfcnDt;
     
     // TODO [6단계] Board와의 연관관계 설정 (핵심!)
     //  - @ManyToOne: 댓글(N) : 게시글(1) 관계
@@ -89,8 +89,6 @@ public class Comment {
         this.comment = comment;
         this.writer = writer;
         this.board = board;
-        this.rgstrDt = LocalDateTime.now();
-        this.mdfcnDt = LocalDateTime.now();
     }
     
     
@@ -121,14 +119,6 @@ public class Comment {
     
     public String getWriter() {
         return writer;
-    }
-    
-    public LocalDateTime getRgstrDt() {
-        return rgstrDt;
-    }
-    
-    public LocalDateTime getMdfcnDt() {
-        return mdfcnDt;
     }
     
     // TODO [6단계] Board getter 추가

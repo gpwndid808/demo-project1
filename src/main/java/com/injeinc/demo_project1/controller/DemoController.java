@@ -152,8 +152,9 @@ public class DemoController {
 	// - Service의 updateBoard() 메서드 호출
 	// 💡 학습 포인트: 더티 체킹(Dirty Checking)으로 자동 업데이트
 	@PutMapping("/boards/{id}")
-	public Board uptBoard(@PathVariable("id") String id,@Valid @RequestBody BoardUpdateDto update) {
-		return demoService.updateBoard(id, update);
+	public BoardResponseDto uptBoard(@PathVariable("id") String id,@Valid @RequestBody BoardUpdateDto update) {
+		Board board = demoService.updateBoard(id, update);
+		return BoardResponseDto.from(board);
 	}
 
 	// TODO [4단계] 게시글 삭제 API 구현하기

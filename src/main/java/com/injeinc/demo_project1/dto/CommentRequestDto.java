@@ -1,10 +1,5 @@
 package com.injeinc.demo_project1.dto;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import com.injeinc.demo_project1.entity.Comment;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

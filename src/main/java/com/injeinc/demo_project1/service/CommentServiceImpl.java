@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 	public List<Comment> getCommentsByBoardId(String id) {
 		
 //		List<Comment> comments = commentRepository.findByBoardBoardId(id);
-		List<Comment> comments = commentRepository.findByBoardBoardIdOrderByRgstrDtDesc(id);
+		List<Comment> comments = commentRepository.findByBoardBoardIdOrderByCreatedDateDesc(id);
 		return comments;
 	}
 

@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // TODO [8단계] JPA Auditing 활성화를 위한 import
 //  - @EnableJpaAuditing 사용을 위해 필요
 //  💡 실습: 아래 import 주석을 해제하세요
-// import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 // TODO [1단계] @SpringBootApplication 어노테이션의 역할 이해하기
 //  - 이 어노테이션은 다음 3가지를 포함합니다:
@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //  - @CreatedDate, @LastModifiedDate가 자동으로 동작하게 됩니다.
 //  - BaseTimeEntity를 상속받은 모든 엔티티에 적용됩니다.
 //  💡 실습: 아래 어노테이션의 주석을 해제하세요
-// @EnableJpaAuditing
+@EnableJpaAuditing
 @SpringBootApplication
 public class DemoProject1Application {
 
