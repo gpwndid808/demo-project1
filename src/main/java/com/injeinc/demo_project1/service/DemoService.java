@@ -2,7 +2,11 @@ package com.injeinc.demo_project1.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.injeinc.demo_project1.dto.BoardRequestDto;
+import com.injeinc.demo_project1.dto.BoardResponseDto;
 import com.injeinc.demo_project1.dto.BoardUpdateDto;
 import com.injeinc.demo_project1.entity.Board;
 
@@ -16,7 +20,7 @@ public interface DemoService {
 	// TODO [3단계] 기본 조회 메서드
 	//  - 전체 게시글 목록을 조회하는 메서드
 	public List<Board> retvLstBoard();
-	
+
 	// TODO [3단계] 단건 조회 메서드 추가하기
 	//  - Board findById(String id); 메서드 선언
 	//  - 특정 ID의 게시글을 조회하는 메서드
@@ -54,12 +58,16 @@ public interface DemoService {
 	//  - Page<Board>를 Page<BoardResponseDto>로 변환
 	//  💡 실습: Page.map() 메서드 활용
 	//  return boardRepository.findAll(pageable).map(BoardResponseDto::from);
+	public Page<BoardResponseDto> findAllWithPaging(Pageable pageable);
 	
 	// TODO [7단계] 검색 메서드 추가하기
 	//  - Page<BoardResponseDto> searchByTitle(String keyword, Pageable pageable);
 	//  - Repository의 쿼리 메서드 호출
 	//  - 결과를 DTO로 변환하여 반환
 	//  💡 학습 포인트: Entity를 DTO로 변환하는 이유
+	public Page<BoardResponseDto> searchByTitle(String keyword, Pageable pageable);
+	
+	public List<Board> searchByKeyword(String keyword);
 	
 	// TODO [7단계] Page.map() 이해하기
 	//  - Stream의 map과 유사한 기능

@@ -1,6 +1,12 @@
 package com.injeinc.demo_project1.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.injeinc.demo_project1.entity.Board;
@@ -31,32 +37,32 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     // TODO [7단계] 제목으로 검색하기
     //  - Containing: LIKE 검색 (부분 일치)
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // List<Board> findByBoardTitleContaining(String keyword);
+	List<Board> findByBoardTitleContaining(String keyword);
     
     // TODO [7단계] 작성자로 검색하기
     //  - Equals 생략 가능 (기본값)
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // List<Board> findByRgstrUsrId(String userId);
+     List<Board> findByRgstrUsrId(String userId);
     
     // TODO [7단계] 여러 조건으로 검색하기 (OR 조건)
     //  - 제목 또는 내용에 키워드가 포함된 게시글 검색
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    // List<Board> findByBoardTitleContainingOrBoardCnContaining(String title, String content);
+     List<Board> findByBoardTitleContainingOrBoardCnContaining(String title, String content);
     
     // TODO [7단계] 정렬 추가하기
     //  - OrderBy + 필드명 + Asc/Desc
     //  💡 실습: 최신 게시글 먼저 조회하기
-    // List<Board> findByBoardTitleContainingOrderByRgstrDtDesc(String keyword);
+     List<Board> findByBoardTitleContainingOrderByRgstrDtDesc(String keyword);
     
     // TODO [7단계] 페이징 처리하기 (핵심!)
     //  - Pageable 파라미터를 추가하면 자동으로 페이징 처리
     //  - import org.springframework.data.domain.Page;
     //  - import org.springframework.data.domain.Pageable;
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    /*
+    
     Page<Board> findAll(Pageable pageable);
     Page<Board> findByBoardTitleContaining(String keyword, Pageable pageable);
-    */
+    
     
     // TODO [7단계] Pageable 사용법 이해하기
     //  - PageRequest.of(page, size, sort)로 생성
@@ -78,10 +84,9 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     //  - import org.springframework.data.jpa.repository.Query;
     //  - import org.springframework.data.repository.query.Param;
     //  💡 실습: 아래 메서드의 주석을 해제하세요
-    /*
+    
     @Query("SELECT b FROM Board b WHERE b.boardTitle LIKE %:keyword% OR b.boardCn LIKE %:keyword%")
     List<Board> searchByKeyword(@Param("keyword") String keyword);
-    */
     
     // TODO [7단계] JPQL vs Native Query
     //  - JPQL: 객체 지향 쿼리 (FROM Board b) - 권장
