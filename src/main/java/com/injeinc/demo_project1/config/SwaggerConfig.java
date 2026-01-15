@@ -25,7 +25,7 @@ public class SwaggerConfig {
     //  - OpenAPI: Swagger 3.x의 명세 객체
     //  - API 문서의 메타정보를 설정합니다.
     //  💡 실습: 아래 주석을 해제하고 완성하세요
-    /*
+    
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
@@ -40,7 +40,7 @@ public class SwaggerConfig {
                     .name("Apache 2.0")
                     .url("http://www.apache.org/licenses/LICENSE-2.0.html")));
     }
-    */
+    
     
     // TODO [10단계] Swagger UI 접속하기
     //  - 애플리케이션 실행 후 브라우저에서 접속

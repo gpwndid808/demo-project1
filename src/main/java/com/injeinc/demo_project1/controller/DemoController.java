@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 //TODO [10단계] Swagger 어노테이션 import하기
 //- API 문서화를 위한 어노테이션들
 //💡 실습: 아래 import 문의 주석을 해제하세요
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.Parameter;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import io.swagger.v3.oas.annotations.tags.Tag;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import com.injeinc.demo_project1.dto.BoardRequestDto;
 import com.injeinc.demo_project1.dto.BoardResponseDto;
@@ -84,12 +83,12 @@ public class DemoController {
 	//  - summary: 간단한 요약
 	//  - description: 상세 설명
 	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
+	
 	@Operation(
 		summary = "게시글 목록 조회",
 		description = "모든 게시글 목록을 조회합니다. 페이징 없이 전체 목록을 반환합니다."
 	)
-	*/
+	
 	@GetMapping("/list")
 	public List<BoardResponseDto> retvLstBoard() {
 		List<Board> boards = demoService.retvLstBoard();
@@ -107,13 +106,13 @@ public class DemoController {
 	//  - required: 필수 여부
 	//  - example: 예시 값
 	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
+	
 	@Operation(summary = "게시글 단건 조회", description = "ID로 특정 게시글을 조회합니다.")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "조회 성공"),
 		@ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음")
 	})
-	*/
+	
 	@GetMapping("/boards/{id}")
 	public BoardResponseDto findById(@PathVariable("id") String id) {
 		
@@ -132,14 +131,14 @@ public class DemoController {
 	//  - 가능한 HTTP 응답 코드와 설명 제공
 	//  - 200: 성공, 400: 잘못된 요청, 404: 찾을 수 없음 등
 	//  💡 실습: 아래 어노테이션의 주석을 해제하세요
-	/*
+	
 	@Operation(summary = "게시글 작성", description = "새로운 게시글을 작성합니다.")
 	@ApiResponses({
 		@ApiResponse(responseCode = "201", description = "생성 성공",
 			content = @Content(schema = @Schema(implementation = Board.class))),
 		@ApiResponse(responseCode = "400", description = "잘못된 요청 (Validation 실패)")
 	})
-	*/
+	
 	
 	@PostMapping("/boards")
 	public Board regtBoard(@RequestBody BoardRequestDto request) {
@@ -301,9 +300,9 @@ public class DemoController {
 	// TODO [10단계] Swagger 어노테이션 import하기
 	//  - API 문서화를 위한 어노테이션들
 	//  💡 실습: 아래 import 문의 주석을 해제하세요
-	// import io.swagger.v3.oas.annotations.Operation;
-	// import io.swagger.v3.oas.annotations.Parameter;
-	// import io.swagger.v3.oas.annotations.responses.ApiResponse;
-	// import io.swagger.v3.oas.annotations.responses.ApiResponses;
-	// import io.swagger.v3.oas.annotations.tags.Tag;
+//	 import io.swagger.v3.oas.annotations.Operation;
+//	 import io.swagger.v3.oas.annotations.Parameter;
+//	 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+//	 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+//	 import io.swagger.v3.oas.annotations.tags.Tag;
 }
