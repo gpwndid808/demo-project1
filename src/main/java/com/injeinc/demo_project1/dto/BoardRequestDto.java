@@ -43,7 +43,6 @@ public class BoardRequestDto {
     //  - 제목(title)과 내용(content)만 받습니다.
     //  - ID는 자동 생성되므로 받지 않습니다.
     //  💡 고민: 작성자 정보는 어떻게 받을까요?
-	private Long boardId;
 	
     @NotBlank(message = "제목은 필수입니다.")
     @Size(min = 1, max = 100, message = "제목은 1~100자 이내여야 합니다.")

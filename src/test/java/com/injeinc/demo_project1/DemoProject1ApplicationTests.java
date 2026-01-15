@@ -1,5 +1,7 @@
 package com.injeinc.demo_project1;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,6 +23,7 @@ class DemoProject1ApplicationTests {
 		//  - 간단한 assertion을 추가해보세요.
 		//  💡 예시: assertEquals(1, 1);
 		//  💡 import static org.junit.jupiter.api.Assertions.*;
+		assertEquals(1, 1);
 	}
 	
 	// TODO [9단계] Service 테스트 추가하기

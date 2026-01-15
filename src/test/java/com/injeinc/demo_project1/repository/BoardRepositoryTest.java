@@ -1,15 +1,21 @@
 package com.injeinc.demo_project1.repository;
 
-import com.injeinc.demo_project1.entity.Board;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import com.injeinc.demo_project1.entity.Board;
 
 // TODO [9단계] @DataJpaTest 이해하기
 //  - JPA 관련 컴포넌트만 로드하는 경량 테스트
@@ -52,30 +58,30 @@ public class BoardRepositoryTest {
         // TODO [9단계] given - 테스트 데이터 준비
         //  - 저장할 Board 엔티티 생성
         //  💡 실습: 아래 주석을 해제하고 완성하세요
-        /*
+        
         Board board = Board.builder()
             .boardTitle("테스트 제목")
             .boardCn("테스트 내용")
             .rgstrUsrId("testUser")
             .build();
-        */
+        
         
         // TODO [9단계] when - 저장 동작 실행
         //  - Repository의 save() 메서드 호출
-        /*
+        
         Board savedBoard = boardRepository.save(board);
-        */
+        
         
         // TODO [9단계] then - 결과 검증 (AssertJ 사용)
         //  - assertThat: AssertJ의 검증 시작
         //  - isNotNull(): null이 아닌지 확인
         //  - isEqualTo(): 값이 같은지 확인
         //  💡 학습 포인트: AssertJ는 읽기 쉬운 assertion을 제공합니다.
-        /*
+        
         assertThat(savedBoard.getBoardId()).isNotNull();
         assertThat(savedBoard.getBoardTitle()).isEqualTo("테스트 제목");
         assertThat(savedBoard.getBoardCn()).isEqualTo("테스트 내용");
-        */
+        
     }
     
     @Test
@@ -86,6 +92,19 @@ public class BoardRepositoryTest {
         //  - when: findById()로 조회
         //  - then: 조회된 데이터 검증
         //  💡 실습: 위 패턴을 참고하여 작성하세요
+    	
+    	//given
+    	Board board = boardRepository.save(Board.builder()
+    										.boardTitle("타이틀")
+    										.boardCn("내용")
+    										.rgstrUsrId("gkgk")
+    										.mdfcnUsrId("gkgk")
+    										.build());
+    	//when
+    	Optional<Board> result = boardRepository.findById(board.getBoardId().toString());
+    	
+    	//then
+    	assertThat(result.get().getBoardId()).isNotNull();
     }
     
     @Test
@@ -96,27 +115,22 @@ public class BoardRepositoryTest {
         //  - when: findByBoardTitleContaining() 호출
         //  - then: 검색 결과 개수 및 내용 검증
         //  💡 실습: 아래 주석을 해제하고 완성하세요
-        /*
-        // given
-        boardRepository.save(Board.builder()
-            .boardTitle("스프링 부트 학습")
-            .boardCn("내용1")
-            .build());
-        boardRepository.save(Board.builder()
-            .boardTitle("JPA 학습")
-            .boardCn("내용2")
-            .build());
-        
-        // when
-        List<Board> result = boardRepository.findByBoardTitleContaining("스프링");
-        
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getBoardTitle()).contains("스프링");
-        */
+		//given 
+		boardRepository.save( Board.builder()
+				.boardTitle("스프링 부트 학습")
+				.boardCn("내용")
+				.build());
+		
+		//when
+		List<Board> result = boardRepository.findByBoardTitleContaining("스프링");
+				
+		//then
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0).getBoardTitle()).contains("스프링");
     }
     
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     @DisplayName("게시글 삭제 테스트")
     void deleteBoard() {
         // TODO [9단계] 삭제 테스트 작성하기
@@ -124,6 +138,21 @@ public class BoardRepositoryTest {
         //  - when: deleteById() 호출
         //  - then: findById()가 빈 Optional 반환하는지 확인
         //  💡 실습: Optional.isEmpty() 또는 assertThat().isEmpty() 사용
+    	
+    	//given
+    	Board board = boardRepository.save(Board.builder()
+    											.boardTitle("스프링")
+    											.boardCn("내용")
+    											.rgstrUsrId("kiki")
+    											.mdfcnUsrId("kiki")
+    											.build());
+    	//when
+    	String boardId = board.getBoardId().toString();
+    	boardRepository.deleteById(boardId);
+    	Optional<Board> result = boardRepository.findById(boardId);
+    	
+    	//then
+    	assertThat(result).isEmpty();
     }
     
     @Test
@@ -134,13 +163,55 @@ public class BoardRepositoryTest {
         //  - when: 엔티티 필드 변경
         //  - then: flush() 후 다시 조회하여 변경사항 확인
         //  💡 학습 포인트: 테스트에서 flush()를 명시적으로 호출
+    	
+    	//given
+    	Board board = Board.builder()
+    						.boardTitle("스프링")
+    						.boardCn("내용")
+    						.rgstrUsrId("kiki")
+							.mdfcnUsrId("kiki")
+							.build();
+    	boardRepository.save(board);
+    	
+    	//when
+    	Optional<Board> result = boardRepository.findById(board.getBoardId().toString());
+    	board.update(board.getBoardTitle() ,"수정해용", board.getMdfcnUsrId());
+    	
+    	//then
+    	boardRepository.flush();
+    	Optional<Board> result2 = boardRepository.findById(result.get().getBoardId().toString());
+    	assertThat(result2.get().getBoardCn()).isEqualTo("수정해용");
     }
     
     // TODO [9단계] 페이징 테스트 작성하기
     //  - PageRequest.of()로 Pageable 생성
     //  - Page 객체의 메서드 검증
     //  - getTotalElements(), getTotalPages() 등
-    
+    @Test
+    @DisplayName("페이징 테스트")
+    void pagingTest() {
+    	
+    	//given
+    	IntStream.rangeClosed(1, 25).forEach(i -> {
+    		boardRepository.save(Board.builder()
+    								.boardTitle("title-" + i)
+    								.boardCn("boardCn-" + i)
+    								.rgstrUsrId("rgstrUsrId" + i)
+    								.mdfcnUsrId("mdfcnUsrId" + i)
+    								.build()
+								);
+    	});
+    	
+    	
+    	//when
+    	Pageable pageable = PageRequest.of(0, 10, Sort.by("boardId").descending());
+    	Page<Board> page = boardRepository.findAll(pageable);
+    	
+    	//then
+    	assertThat(page.getContent()).hasSize(10);
+    	assertThat(page.getTotalElements()).isEqualTo(25);
+    	assertThat(page.getTotalPages()).isEqualTo(3);
+    }    
     // TODO [9단계] AssertJ 주요 메서드 익히기
     //  - isEqualTo(), isNotEqualTo()
     //  - isNull(), isNotNull()
